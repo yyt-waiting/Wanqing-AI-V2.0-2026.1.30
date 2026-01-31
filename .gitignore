@@ -1,0 +1,21 @@
+# Python 垃圾
+backend/venv/
+**/__pycache__/
+*.pyc
+
+# Node.js 垃圾 (前端依赖)
+frontend/node_modules/
+frontend/dist/
+
+# 婉晴的日记和本地数据
+backend/storage/logs/*.jsonl
+backend/storage/logs/*.txt
+*.wav
+*.mp3
+
+# 隐私配置 (如果你以后用 .env 文件)
+.env
+
+# 系统文件
+.DS_Store
+Thumbs.db

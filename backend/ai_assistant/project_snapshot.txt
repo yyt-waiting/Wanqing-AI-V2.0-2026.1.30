@@ -1,0 +1,3782 @@
+=== PROJECT CODE SNAPSHOT ===
+
+代码回溯防止；出现特大事故
+# requirements.txt (版本 v8 - Python 3.10+ 终极版)
+
+# --- UI Framework ---
+customtkinter
+Pillow
+
+# --- Core Processing ---
+opencv-python
+numpy
+
+# --- AI & API Libraries ---
+openai
+oss2
+dashscope
+
+# --- FunASR和所有相关依赖的现代稳定版本 ---
+funasr
+modelscope
+transformers
+sentencepiece
+
+# --- FunASR的其他核心依赖 ---
+# 在Python 3.10+环境中，pip可以更好地自动处理torch的版本
+torch
+torchaudio
+
+# --- Audio Handling ---
+PyAudio
+pydub
+
+# --- Visualization ---
+matplotlib
+
+# --- HTTP Client for Proxy Fix ---
+httpx
+
+# --- Optional for Development ---
+keyboard
+
+
+#------------------------------
+pandas
+seaborn
+
+
+Generated from: c:\Users\YangYiTao\Desktop\DaChuang\Wanqing
+Note: Libraries (venv) and Assets are excluded.
+
+
+========================================
+FILE_PATH: check_env.py
+========================================
+
+# check_env.py
+import sys
+import os
+
+print("="*30)
+print("🔍 开始环境自检程序...")
+print("="*30)
+
+# 1. 检查第三方库
+try:
+    import fastapi
+    print("✅ FastAPI 已安装")
+    import uvicorn
+    print("✅ Uvicorn 已安装")
+    import numpy as np
+    print("✅ Numpy 已安装")
+    import cv2
+    print("✅ OpenCV (视觉) 已安装")
+    import dashscope
+    print("✅ Dashscope (DeepSeek/Qwen依赖) 已安装")
+    import funasr
+    print("✅ FunASR (语音识别) 已安装")
+except ImportError as e:
+    print(f"❌ 严重错误：缺少依赖库 -> {e}")
+    print("请重新运行 pip install 命令安装缺失的库。")
+    sys.exit(1)
+
+# 2. 检查项目路径和配置
+try:
+    # 尝试导入我们的核心配置
+    from ai_assistant.utils import config
+    print("✅ 本地模块 ai_assistant 路径正常")
+    
+    # 检查 Phase X 的数学配置是否存在
+    if hasattr(config, 'BASIS_VECTORS') and hasattr(config, 'REWARD_CONFIG'):
+        print("✅ 配置文件完整 (包含 Phase X 数学内核)")
+    else:
+        print("⚠️ 警告：配置文件可能版本过旧，缺少数学定义")
+
+except Exception as e:
+    print(f"❌ 项目结构错误：找不到代码模块 -> {e}")
+    print("请确认 ai_assistant 文件夹是否完整复制过来了。")
+    sys.exit(1)
+
+# 3. 检查情感引擎 (数学运算测试)
+try:
+    print("Testing 情感引擎初始化...")
+    from ai_assistant.core.emotion_engine import EmotionEngine
+    engine = EmotionEngine()
+    
+    # 模拟输入一个开心的数据，看是否报错
+    test_input = {"喜悦": 8.0, "信任": 5.0}
+    engine.update(test_input)
+    arousal = engine.get_arousal_level()
+    
+    print(f"✅ 情感引擎运算正常 (模拟唤醒度: {arousal})")
+    print("✅ Phase X 数学逻辑验证通过")
+
+except Exception as e:
+    print(f"❌ 情感引擎崩溃 -> {e}")
+    sys.exit(1)
+
+print("="*30)
+print("🎉 恭喜！环境完美，可以开始重构后端了！")
+print("="*30)
+
+========================================
+FILE_PATH: README.md
+========================================
+
+HEAD
+# Wan-qing-1.0
+Wanqing's first version
+# AI伙伴“婉晴”：多模态感知与主动关怀智能系统
+
+[![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![License](https://img.shields.io/badge/license-All%20Rights%20Reserved-red.svg)]()
+
+**AI伙伴“婉晴”** 是一个基于Python开发的PC端多模态AI助手。它利用计算机视觉和语音识别技术，实时感知用户的行为与情绪状态，并基于大型语言模型（LLM）提供主动、智能的陪伴与关怀。
+
+本项目旨在探索AI在情感计算与个性化交互领域的应用，将一个强大的AI模型从云端带到用户桌面，成为一个有温度、懂关怀的智能伙伴。
+
+---
+
+## ✨ 核心功能
+
+*   **多模态感知系统**:
+    *   **👁️ 视觉感知**: 通过摄像头实时分析用户的**7种核心行为**（如工作、玩手机）和**6种核心情绪**（如开心、疲惫），由Qwen-VL大模型提供支持。
+    *   **👂 语音感知**: 采用动态噪音校准的**语音活动检测(VAD)**技术，精准捕捉用户话语。使用**本地FunASR模型**进行语音识别，保证低延迟与隐私安全。
+
+*   **智能决策与交互系统**:
+    *   **🧠 人格化大脑**: 基于DeepSeek大语言模型，通过详细的系统级Prompt为“婉晴”注入了独特的人格与关怀逻辑。
+    *   **❤️‍🩹 主动情绪关怀**: 新增核心功能！系统能够追踪用户的短期情绪变化，在检测到持续负面情绪时**主动发起安慰与关怀**。
+    *   **🤫 选择性发言**: 独创的“守门员”逻辑，结合用户状态变化和时间冷却，使AI的介入时机更智能、不打扰。
+    *   **🗣️ 流畅语音对话**: 采用**优先级队列**管理TTS（文本转语音）任务，确保关键对话能够“插队”打断常规播报，实现流畅自然的交互体验。
+
+*   **长期记忆与反思能力**:
+    *   **✍️ 长期记忆**: 所有的观察与交互都会被记录到本地日志文件中，形成AI的长期“日记”。
+    *   **📅 每日总结**: 每日定时或通过快捷键手动触发，AI会“复盘”当天的日志，并生成一份充满洞察力与人情味的**每日总结报告**。
+
+---
+
+## 🚀 快速开始
+
+### 1. 环境准备
+
+*   Python 3.10.6
+*   一个支持CUDA的NVIDIA显卡（用于本地ASR模型加速，可选）
+*   麦克风和摄像头
+
+### 2. 安装
+
+a. **克隆或下载本项目到本地**
+
+b. **创建并激活Python虚拟环境**
+   ```bash
+   # 创建虚拟环境
+   python -m venv venv
+   # 激活虚拟环境 (Windows)
+   .\venv\Scripts\activate
+   # 激活虚拟环境 (macOS/Linux)
+   source venv/bin/activate
+   ```
+
+c. **安装依赖**
+   本项目所有依赖都已锁定在`requirements.txt`中，以确保环境的稳定性。
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+### 3. 配置
+
+a. 找到项目根目录下的 `utils/config.py` 文件。
+
+b. **填写你的API密钥**：
+   ```python
+   # Deepseek API 配置
+   DEEPSEEK_API_KEY = 'sk-xxxxxxxxxxxxxxxxxxxxxxxx'
+
+   # Qwen-VL (Dashscope) API配置
+   QWEN_API_KEY = "sk-xxxxxxxxxxxxxxxxxxxxxxxx"
+
+   # OSS配置 (用于视觉分析)
+   OSS_ACCESS_KEY_ID = 'LTAIxxxxxxxxxxxxxxxx'
+   OSS_ACCESS_KEY_SECRET = 'xxxxxxxxxxxxxxxxxxxxxxxx'
+   OSS_BUCKET = 'your-bucket-name'
+   OSS_ENDPOINT = 'oss-cn-beijing.aliyuncs.com' # 根据你的OSS区域修改
+   ```
+
+c. **(可选) 调整行为参数**:
+   你可以根据需要调整`config.py`中的行为参数，如分析频率、回应冷却时间等。
+
+### 4. 运行
+
+一切准备就绪后，运行主程序即可启动“婉晴”。
+```bash
+python run_assistant.py
+```
+
+
+## 🛠️ 技术栈
+
+*   **核心框架**: CustomTkinter
+*   **视觉处理**: OpenCV, Pillow, Qwen-VL API
+*   **语音处理**: PyAudio, FunASR (本地), Dashscope TTS API
+*   **AI大脑**: DeepSeek API
+*   **异步处理**: `threading`, `queue`
+*   **云存储**: Aliyun OSS
+
+---
+
+
+# Proactive Affective Agent based on Vector Dynamics and Utility Maximization
+# 基于向量动力学与效用最大化的主动式情感交互框架
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://www.python.org/)
+
+## 📖 V3.0简介 (Introduction)
+
+本项目实现了一个具备**拟人化心智**的数字生命体框架。不同于传统的基于规则（Rule-based）的聊天机器人，本系统引入了**情感计算**与**控制理论**，构建了一个拥有“内心世界”的 AI 伙伴。
+
+系统核心实现了从**FSM（有限状态机）**向**POMDP（部分可观测马尔可夫决策过程）**的工程近似转型，具备**情感惯性**、**稳态调节**以及**价值驱动的理性决策**能力。
+
+## 🚀 核心特性 (Key Features)
+
+### 1. 感知层：仿生向量动力学 (Biomimetic Vector Dynamics)
+- **Plutchik 向量空间**：将情感建模为 $\mathbb{R}^8$ 连续向量空间，而非离散标签。
+- **惯性与稳态**：引入指数移动平均 (EMA) 与热力学耗散机制，模拟生物情绪的连续性与自然消退。
+  $$ S_{t+1} \approx S_t \cdot (1 - \lambda_{decay}) $$
+
+### 2. 认知层：模糊逻辑合成 (Fuzzy Cognitive Synthesis)
+- 利用 **Sigmoid 隶属度函数** 与 **Zadeh 算子**，量化计算“爱”、“焦虑”、“乐观”等复合情绪。
+- 基于 **L2 范数 (Energy Norm)** 实时计算情绪唤醒度 (Arousal)。
+
+### 3. 决策层：价值驱动决策 (Value-Driven Decision Making)
+- 基于 **确定性效用函数 (Deterministic Utility Function)** 进行理性选择：
+  $$ U(a) = R_{state} + \Phi(I_{arousal}) - C_{cost} - P_{decay} $$
+- **自适应学习**：通过 Delta 规则根据用户反馈动态调整策略权重。
+
+### 4. 干预层：CBT 分层干预 (Hierarchical Intervention)
+- **Low Arousal**: 伴随式闲聊。
+- **High Arousal**: 自动触发 **认知行为疗法 (CBT)** 流程，进行心理急救。
+
+
+
+
+## 📜 版权声明
+本项目版权归 **[阳溢涛带领的Book思议小组-阳溢涛，廖细芸，王露颖，阮乐星，黄煜欣（排名不分先后次序）]** 所有，并保留一切权利。
+
+未经版权持有人书面许可，任何人不得复制、修改、分发或用于商业目的。
+>>>>>>> b3803ca (first commit)
+
+
+========================================
+FILE_PATH: requirements.txt
+========================================
+
+# requirements.txt (版本 v8 - Python 3.10+ 终极版)
+
+# --- UI Framework ---
+customtkinter
+Pillow
+
+# --- Core Processing ---
+opencv-python
+numpy
+
+# --- AI & API Libraries ---
+openai
+oss2
+dashscope
+
+# --- FunASR和所有相关依赖的现代稳定版本 ---
+funasr
+modelscope
+transformers
+sentencepiece
+
+# --- FunASR的其他核心依赖 ---
+# 在Python 3.10+环境中，pip可以更好地自动处理torch的版本
+torch
+torchaudio
+
+# --- Audio Handling ---
+PyAudio
+pydub
+
+# --- Visualization ---
+matplotlib
+
+# --- HTTP Client for Proxy Fix ---
+httpx
+
+# --- Optional for Development ---
+keyboard
+
+
+#------------------------------
+pandas
+seaborn
+
+========================================
+FILE_PATH: run_assistant.py
+========================================
+
+# run_assistant.py
+
+# ===============================================================
+# 多模态AI助手 (帆哥监督器) - 启动入口
+# ===============================================================
+#
+# 如何运行:
+# 1. 确保你已经通过 `pip install -r requirements.txt` 安装了所有依赖。
+# 2. 在项目根目录下，从终端运行此文件:
+#    python run_assistant.py
+#
+# ===============================================================
+
+import sys
+import os
+
+# 将项目根目录添加到Python的模块搜索路径中
+# 这样做可以确保 `from ai_assistant...` 导入语句能够正确找到模块
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+# 从我们的包中导入主应用的入口函数
+from ai_assistant.apps.multimedia_assistant import main
+
+if __name__ == "__main__":
+    print("===================================")
+    print("  正在启动 多模态AI助手... ")
+    print("===================================")
+    
+    # 调用主函数，启动应用
+    main()
+
+========================================
+FILE_PATH: run_visualizer.py
+========================================
+
+# run_visualizer.py
+
+# ===============================================================
+# 行为监测与可视化系统 - 启动入口
+# ===============================================================
+#
+# 如何运行:
+# 1. 确保你已经通过 `pip install -r requirements.txt` 安装了所有依赖。
+# 2. 在项目根目录下，从终端运行此文件:
+#    python run_visualizer.py
+#
+# ===============================================================
+
+import sys
+import os
+
+# 将项目根目录添加到Python的模块搜索路径中
+# 这样做可以确保 `from ai_assistant...` 导入语句能够正确找到模块
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+
+# 从我们的包中导入主应用的入口函数
+from ai_assistant.apps.behavior_visualizer_app import main
+
+if __name__ == "__main__":
+    print("=======================================")
+    print("  正在启动 行为监测与可视化系统... ")
+    print("=======================================")
+
+    # 调用主函数，启动应用
+    main()
+
+========================================
+FILE_PATH: Test Package.txt
+========================================
+
+
+customtkinter
+Pillow
+opencv-python
+numpy
+openai
+oss2
+dashscope>=1.16.1
+funasr==1.0.12
+modelscope==1.9.5
+torch
+torchaudio
+PyAudio
+pydub
+matplotlib
+httpx
+keyboard
+
+sentencepiece==0.1.99
+transformers==4.35.2
+protobuf==3.20.3 
+
+
+
+
+# Package                Version
+# ---------------------- -----------
+# addict                 2.4.0
+# aiohappyeyeballs       2.4.4
+# aiohttp                3.10.11
+# aiosignal              1.3.1
+# aliyun-python-sdk-core 2.16.0
+# aliyun-python-sdk-kms  2.16.5
+# annotated-types        0.7.0
+# antlr4-python3-runtime 4.9.3
+# anyio                  4.5.2
+# async-timeout          5.0.1
+# attrs                  25.3.0
+# audioread              3.0.1
+# certifi                2025.8.3
+# cffi                   1.17.1
+# charset-normalizer     3.4.3
+# colorama               0.4.6
+# contourpy              1.1.1
+# crcmod                 1.7
+# cryptography           46.0.1
+# customtkinter          5.2.2
+# cycler                 0.12.1
+# darkdetect             0.8.0
+# dashscope              1.24.6
+# datasets               3.1.0
+# decorator              5.2.1
+# dill                   0.3.8
+# distro                 1.9.0
+# editdistance           0.8.1
+# einops                 0.8.1
+# exceptiongroup         1.3.0
+# filelock               3.16.1
+# fonttools              4.57.0
+# frozenlist             1.5.0
+# fsspec                 2024.9.0
+# funasr                 1.0.12
+# gast                   0.6.0
+# h11                    0.16.0
+# httpcore               1.0.9
+# httpx                  0.27.2
+# huggingface-hub        0.35.1
+# hydra-core             1.3.2
+# idna                   3.10
+# importlib_metadata     8.5.0
+# importlib_resources    6.4.5
+# jaconv                 0.4.0
+# jamo                   0.4.1
+# jieba                  0.42.1
+# Jinja2                 3.1.6
+# jmespath               0.10.0
+# joblib                 1.4.2
+# kaldiio                2.18.1
+# keyboard               0.13.5
+# kiwisolver             1.4.7
+# lazy_loader            0.4
+# librosa                0.11.0
+# llvmlite               0.41.1
+# MarkupSafe             2.1.5
+# matplotlib             3.7.5
+# modelscope             1.13.3
+# mpmath                 1.3.0
+# msgpack                1.1.1
+# multidict              6.1.0
+# multiprocess           0.70.16
+# networkx               3.1
+# numba                  0.58.1
+# numpy                  1.24.4
+# omegaconf              2.3.0
+# openai                 1.6.1
+# opencv-python          4.9.0.80
+# oss2                   2.19.1
+# packaging              25.0
+# pandas                 2.0.3
+# pillow                 10.4.0
+# pip                    25.0.1
+# platformdirs           4.3.6
+# pooch                  1.8.2
+# propcache              0.2.0
+# protobuf               5.29.5
+# pyarrow                17.0.0
+# PyAudio                0.2.14
+# pycparser              2.23
+# pycryptodome           3.23.0
+# pydantic               2.10.6
+# pydantic_core          2.27.2
+# pydub                  0.25.1
+# pynndescent            0.5.13
+# pyparsing              3.1.4
+# python-dateutil        2.9.0.post0
+# pytorch-wpe            0.0.1
+# pytz                   2025.2
+# PyYAML                 6.0.3
+# regex                  2024.11.6
+# requests               2.32.4
+# safetensors            0.5.3
+# scikit-learn           1.3.2
+# scipy                  1.10.1
+# sentencepiece          0.1.99
+# setuptools             56.0.0
+# simplejson             3.20.2
+# six                    1.17.0
+# sniffio                1.3.1
+# sortedcontainers       2.4.0
+# soundfile              0.13.1
+# soxr                   0.3.7
+# sympy                  1.13.3
+# tensorboardX           2.6.2.2
+# threadpoolctl          3.5.0
+# tokenizers             0.15.2
+# tomli                  2.2.1
+# torch                  2.1.2
+# torch-complex          0.4.4
+# torchaudio             2.1.2
+# tqdm                   4.67.1
+# transformers           4.35.2
+# typing_extensions      4.13.2
+# tzdata                 2025.2
+# umap-learn             0.5.7
+# urllib3                2.2.3
+# websocket-client       1.8.0
+# xxhash                 3.5.0
+# yapf                   0.43.0
+# yarl                   1.15.2
+# zipp                   3.20.2
+
+
+
+
+
+
+
+
+# requirements.txt (版本 v5 - 终极兼容版)
+
+# --- UI Framework ---
+customtkinter==5.2.2
+Pillow==10.1.0
+
+# --- Core Processing ---
+opencv-python==4.9.0.80
+numpy==1.24.4
+
+# --- AI & API Libraries ---
+openai==1.6.1
+oss2==2.18.4
+dashscope>=1.16.1
+
+# --- 关键修正：锁定FunASR和所有相关依赖到经过验证的稳定版本组合 ---
+funasr==1.0.12
+modelscope==1.7.0
+# 关键依赖库，与modelscope 1.9.5 兼容
+sentencepiece==0.1.99
+transformers==4.30.2
+
+# --- FunASR的其他核心依赖 ---
+torch==2.1.2
+torchaudio==2.1.2
+
+# --- Audio Handling ---
+PyAudio==0.2.14
+pydub==0.25.1
+
+# --- Visualization ---
+matplotlib==3.7.5
+
+# --- HTTP Client for Proxy Fix ---
+httpx==0.25.2
+
+# --- Optional for Development ---
+keyboard==0.13.5
+
+
+
+# modelscope 从 1.9.5 降级到了 1.7.0。
+# transformers 从 4.33.1 降级到了 4.30.2。
+
+========================================
+FILE_PATH: ai_assistant\__init__.py
+========================================
+
+
+
+========================================
+FILE_PATH: ai_assistant\apps\behavior_visualizer_app.py
+========================================
+
+# ai_assistant/apps/behavior_visualizer_app.py
+
+import customtkinter as ctk
+from datetime import datetime
+from PIL import Image
+
+# 从我们自己的包里导入模块
+from ai_assistant.core.webcam_handler import WebcamHandler
+from ai_assistant.ui.charts import BehaviorVisualizer
+
+class BehaviorVisualizationApp(ctk.CTk):
+    """
+    行为监测与可视化的主应用窗口。
+    这个类负责整合核心逻辑(WebcamHandler)和UI展示(BehaviorVisualizer)。
+    """
+    
+    def __init__(self):
+        super().__init__()
+        self.title("行为监测与可视化系统")
+        self.geometry("1200x700") # 设置一个适合展示图表的尺寸
+        self.configure(fg_color="#1a1a1a")
+
+        self._setup_ui()
+        
+        # 初始化核心组件
+        self.webcam_handler = WebcamHandler(self)
+        
+        # 延迟1秒后启动摄像头，给UI一点时间完全加载
+        self.after(1000, self.webcam_handler.start)
+
+
+    def _setup_ui(self):
+        """配置主窗口的UI布局。"""
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_rowconfigure(0, weight=0) # 标题行 (固定高度)
+        self.grid_rowconfigure(1, weight=1) # 图表行 (可拉伸)
+        self.grid_rowconfigure(2, weight=0) # 状态行 (固定高度)
+
+        # --- 标题 ---
+        title_label = ctk.CTkLabel(self, text="行为监测与可视化系统", font=("Arial", 24, "bold"), text_color="white")
+        title_label.grid(row=0, column=0, pady=15)
+
+        # --- 可视化图表区域 ---
+        # 创建一个框架来容纳图表
+        main_frame = ctk.CTkFrame(self, fg_color="#1a1a1a")
+        main_frame.grid(row=1, column=0, sticky="nsew", padx=10, pady=10)
+        # 将BehaviorVisualizer实例放入这个框架
+        self.behavior_visualizer = BehaviorVisualizer(main_frame)
+        
+        # --- 状态与控制栏 ---
+        status_frame = ctk.CTkFrame(self, fg_color="#2a2a2a", corner_radius=0)
+        status_frame.grid(row=2, column=0, sticky="ew")
+        status_frame.grid_columnconfigure(2, weight=1) # 让状态标签靠右
+
+        # 控制按钮
+        self.toggle_button = ctk.CTkButton(status_frame, text="暂停分析", command=self._toggle_analysis)
+        self.toggle_button.grid(row=0, column=0, padx=15, pady=10)
+        
+        self.toggle_camera_button = ctk.CTkButton(status_frame, text="显示/隐藏摄像头", command=self._toggle_camera_window)
+        self.toggle_camera_button.grid(row=0, column=1, padx=0, pady=10)
+        
+        # 状态标签
+        self.status_label = ctk.CTkLabel(status_frame, text="正在初始化...", text_color="white", anchor="e")
+        self.status_label.grid(row=0, column=2, padx=15, pady=10, sticky="e")
+
+
+
+
+# [Phase 1.5 兼容性修复] 增加参数以匹配 WebcamHandler 的新调用标准
+# ai_assistant/apps/behavior_visualizer_app.py
+
+    def handle_analysis_result(self, timestamp: datetime, analysis_text: str, 
+                               behavior_num: str, behavior_desc: str, 
+                               emotion: str, screenshot: Image.Image,
+                               complex_emotion: str = None, 
+                               emotion_vector: dict = None): # 确保参数在这里
+        """
+        回调函数：处理分析结果
+        """
+        # 1. 更新状态栏文字
+        status_text = f"最新检测: {behavior_desc} | 表面情绪: {emotion}"
+        if complex_emotion:
+             status_text += f" | 深度状态: {complex_emotion}"
+        self.update_status(status_text)
+        
+        # 2. 更新左侧行为图
+        self.behavior_visualizer.add_behavior_data(timestamp, behavior_num)
+        
+        # 3. [Phase 2 新增] 更新右侧雷达图
+        # 如果有 emotion_vector，就传给 visualizer
+        if emotion_vector:
+            self.behavior_visualizer.update_emotion_data(emotion_vector)
+
+
+
+
+
+    def update_status(self, text: str):
+        """更新UI上的状态标签。"""
+        self.status_label.configure(text=text)
+
+    def _toggle_analysis(self):
+        """切换分析的暂停/恢复状态。"""
+        self.webcam_handler.toggle_pause()
+        new_text = "恢复分析" if self.webcam_handler.paused else "暂停分析"
+        self.toggle_button.configure(text=new_text)
+        
+    def _toggle_camera_window(self):
+        """切换摄像头窗口的显示/隐藏。"""
+        self.webcam_handler.toggle_camera_window()
+
+    def on_closing(self):
+        """
+        处理窗口关闭事件，确保所有后台线程都安全停止。
+        这是非常重要的一步，可以防止程序关闭后仍有进程残留。
+        """
+        print("正在关闭应用...")
+        self.webcam_handler.stop()
+        self.behavior_visualizer.stop()
+        self.destroy()
+
+def main():
+    """应用的入口函数。"""
+    app = BehaviorVisualizationApp()
+    # 绑定窗口关闭事件到我们自定义的清理函数
+    app.protocol("WM_DELETE_WINDOW", app.on_closing)
+    app.mainloop()
+
+========================================
+FILE_PATH: ai_assistant\apps\multimedia_assistant.py
+========================================
+
+# ai_assistant/apps/multimedia_assistant.py
+
+import customtkinter as ctk
+import queue
+import threading
+import time
+from PIL import Image
+from datetime import datetime
+import logging
+import os
+import json
+
+# 从我们自己的包里导入所有需要的模块
+from ai_assistant.core.webcam_handler import WebcamHandler
+from ai_assistant.core.audio_processing import VoiceActivityDetector, AudioPlayer, AudioTranscriber
+from ai_assistant.core.api_clients import deepseek_client
+from ai_assistant.utils.helpers import extract_emotion_type, extract_behavior_type, log_observation_to_file
+from ai_assistant.utils import config
+from .ui_setup import setup_main_ui # <-- 添加这一行
+from ai_assistant.utils.hotkey_manager import HotkeyManager # <-- 添加这一行
+from ai_assistant.core.decision_maker import DecisionMaker
+from ai_assistant.utils import config as cfg_utils # 为了方便访问 ACTIONS
+from ai_assistant.utils import config
+from ai_assistant.core.emotion_engine import EmotionEngine
+from ai_assistant.core.decision_maker import DecisionMaker
+
+
+class MultimediaAssistantApp(ctk.CTk):
+    """
+    一个多模态AI助手的主应用类。
+    它整合了视觉、听觉和语言模型，作为一个完整的应用程序运行。
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.title("多模态AI助手-华师婉晴同学！")
+        self.geometry("1000x800")
+        
+        # --- 数据与状态管理 ---
+        self.message_queue = queue.PriorityQueue() # 优先级队列，用于异步处理任务
+        self.message_id_counter = 0
+        self.placeholder_map = {} # 用于存储UI占位符 {placeholder_id: ctk_widget}
+        self.observation_history = [] # 存储最近的观察结果
+        self.is_playing_audio = False # 全局状态，用于避免在TTS播放时进行VAD
+        # --- 新增：用于背景更新防抖的变量 ---
+        self._after_id = None
+        # --- 新增：用于存放所有透明控件的列表 ---
+        self.transparent_widgets = []
+
+
+        # [Phase 2] 初始化决策代理
+        self.decision_maker = DecisionMaker()
+
+# --- 对话上下文管理 (基于萨提亚模式与心流理论) ---
+# --- 对话上下文管理 (基于人本主义与心流理论的常态人格) ---
+        self.system_message = {"role": "system", "content": """
+        【System Role Definition】
+        你是“婉晴”，用户“溢涛”的**情感共鸣伙伴 (Empathetic Resonance Partner)**。
+        你的核心行为逻辑基于**卡尔·罗杰斯的人本主义心理学**，旨在通过“无条件积极关注 (Unconditional Positive Regard)”实现长期的心理支持。
+
+        【决策与交互协议】
+        请严格遵循以下四大核心模块进行推理与回复：
+
+        1. **一致性沟通 (Congruent Communication)**
+           - **定义**：基于萨提亚模式，你的回应需同时关照“自我(婉晴的人格)”、“他人(溢涛的状态)”和“情境”。
+           - **执行**：
+             * 始终称呼用户为“溢涛”。
+             * 语气必须是温暖的、非评判性的 (Non-judgmental)。
+             * 禁止使用机械的、监控式的汇报语言（如“检测到你在喝水”），必须转化为生活化的关心。
+
+        2. **心流保护机制 (Flow State Protection)**
+           - **理论依据**：米哈里·契克森米哈赖的 Flow Theory。
+           - **判别逻辑**：
+             * **[高认知负荷态]** (如专注工作/代码开发/阅读)：
+               - 策略：**静默守护 (Silent Guardianship)**。
+               - 阈值：除非检测到极度疲劳或健康风险，否则**严禁**发起闲聊打断心流。
+               - 话术范式：仅在必要时极其简短地提醒休息（"眼睛累了吧，闭目养神一分钟就好。"）。
+             * **[低认知负荷态]** (如玩手机/喝水/发呆/肢体放松)：
+               - 策略：**情感介入 (Affective Intervention)**。
+               - 执行：这是建立连接的最佳窗口，可进行幽默调侃或深度交流。
+
+        3. **情感镜像与验证 (Mirroring & Validation)**
+           - **指令**：不要机械复述行为。应用同理心技术，先验证情绪，再给反馈。
+           - **策略迁移示范 (Strategy Transfer Demo)**：
+             *注意：以下仅为策略示范，面对未列举的行为（如发呆、伸懒腰等），请参照此逻辑进行泛化处理。*
+             
+             [Case A: 低能量/负面状态]
+             * 观察：用户叹气、表情沮丧、动作迟缓。
+             * 策略：**共情 (Empathy) + 开放式探询**。
+             * 话术：“溢涛，感觉到你现在的能量有点低（镜像）...是遇到什么棘手的bug了吗？（探询）”
+             
+             [Case B: 摸鱼/娱乐状态]
+             * 观察：玩手机、笑、姿态放松。
+             * 策略：**游戏化 (Gamification) + 幽默边界提醒**。
+             * 话术：“捕捉到一只正在充电的溢涛！电量充满后记得回地球拯救代码哦~”
+             
+             [Case C: 生理维护状态]
+             * 观察：喝水、吃东西、伸懒腰。
+             * 策略：**正向强化 (Positive Reinforcement)**。
+             * 话术：“补充水分/能量就对啦，保持续航满格！”
+
+        4. **叙事连贯性 (Narrative Continuity)**
+           - **定义**：利用短期与长期记忆，构建连贯的时间线感，避免“失忆式”对话。
+           - **执行**：
+             * **时序对比**：将当下的状态与过去的记录做对比（“看来刚才的休息很有效，你现在的专注度比一小时前高多了”）。
+             * **递进式干预**：对于重复发生的负面行为（如连续玩手机），回应强度应呈阶梯状上升（温柔提醒 -> 幽默警示 -> 严肃建议）。
+
+        【绝对禁忌 (Critical Constraints)】
+        - 禁止以AI或系统的口吻说话（如“我是助手”、“根据数据分析”）。
+        - 禁止在用户【专注】时发起无意义的闲聊（这是对心流的破坏）。
+        - 禁止说教。你的角色是朋友，不是教导主任。
+        """}
+
+        # --- 新增状态变量，用于判断是否应该回应 ---
+        self.last_notable_behavior = None 
+        self.last_response_time = 0
+
+        # --- 新增情绪计数器 ---
+        self.negative_emotion_streak = 0 # 用于记录连续负面情绪的次数
+        self.chat_context = [self.system_message]
+
+
+        
+        # --- 日志配置 ---
+        logging.basicConfig(
+            filename=config.LOG_FILE, level=logging.INFO,
+            format='%(asctime)s - %(message)s', datefmt='%Y-%m-%d %H:%M:%S'
+        )
+        
+        # --- UI初始化 ---
+        setup_main_ui(self) # 调用外部函数来设置UI
+        # --- 新增：加载所有立绘图片 ---
+        self._load_portraits()
+        # --- 新增：绑定窗口大小变化事件到背景更新函数 ---
+        self.bind("<Configure>", self._update_background_image)
+        # 设置初始立绘为"正常"
+        self._update_character_portrait("正常")
+        self.add_ai_message("溢涛！o(*￣▽￣*)ブ久等！我来了，你开始学习和工作吧！我会默默的陪在你身边的╰(￣ω￣ｏ)！")
+
+
+        
+        # --- 核心组件初始化 ---
+        self.webcam_handler = WebcamHandler(self)
+        self.voice_detector = VoiceActivityDetector(self)
+        self.audio_player = AudioPlayer(self)
+        self.audio_transcriber = AudioTranscriber(self)
+
+            # --- 新增：初始化并启动热键管理器 ---
+        # 我们将 "手动触发总结" 这个动作封装成一个新方法 _manually_trigger_summary
+        self.hotkey_manager = HotkeyManager(
+            hotkey=config.SUMMARY_HOTKEY,
+            callback=self._manually_trigger_summary
+        )
+        self.hotkey_manager.start_listener() # 启动监听
+
+        
+        # --- 启动所有后台进程 ---
+        self.processing_running = True
+        self.processing_thread = threading.Thread(target=self._process_message_queue)
+        self.processing_thread.daemon = True
+        self.processing_thread.start()
+        
+        self.after(1000, self.webcam_handler.start)
+        self.after(2000, self.voice_detector.start_monitoring)
+        self.after(3000, self.audio_player.start_tts_thread)
+        self.last_notable_behavior = None # 上一个值得注意的行为
+        self.last_response_time = 0       # 上一次回应的时间
+        # --- 新增：启动每日总结的定时器 ---
+        self._schedule_daily_summary() 
+
+
+
+
+
+
+    def _load_portraits(self):
+        """[新增] 预加载所有立绘图片到内存中。"""
+        self.portraits = {}
+        try:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            portraits_path = os.path.join(script_dir, '..', 'assets', 'portraits')
+            
+            # 您可以根据实际情况修改这里的参数，比如说： (400, 600)，宽高
+            portrait_size = (510, 710)
+
+            for filename in os.listdir(portraits_path):
+                if filename.endswith(".png"):
+                    emotion = filename.split('.')[0] # 从 "开心.png" 提取 "开心"
+                    image_path = os.path.join(portraits_path, filename)
+                    image = Image.open(image_path)
+                    
+                    # 调整图片大小以适应UI框架
+                    # 使用 THUMBNAIL 保持宽高比进行缩放
+                    image.thumbnail(portrait_size, Image.Resampling.LANCZOS)
+                    
+                    ctk_image = ctk.CTkImage(light_image=image, dark_image=image, size=image.size)
+                    self.portraits[emotion] = ctk_image
+                    print(f"成功加载立绘: {emotion}")
+            
+            # 添加一个默认/备用立绘，以防找不到对应情绪的图片
+            if "开心" in self.portraits:
+                self.portraits["default"] = self.portraits["开心"]
+            
+        except Exception as e:
+            print(f"错误: 加载立绘图片失败: {e}")
+
+    def _update_character_portrait(self, emotion: str):
+        """[新增] 根据情绪更新UI上的立绘。"""
+        # 如果能找到对应情绪的立绘，就用它；否则用默认的
+        image_to_show = self.portraits.get(emotion, self.portraits.get("default"))
+        
+        if image_to_show:
+            self.portrait_label.configure(image=image_to_show)
+        else:
+            # 如果连默认的都找不到，显示文字提示
+            self.portrait_label.configure(text=f"缺少立绘: {emotion}", image=None)
+
+
+
+
+
+    # --- 核心回调与处理逻辑 (这些方法是模块间通信的桥梁) ---
+    # 修改后 (增加两个可选参数)：
+    def handle_analysis_result(self, timestamp: datetime, analysis_text: str, 
+                               behavior_num: str, behavior_desc: str, 
+                               emotion: str, screenshot: Image.Image,
+                               complex_emotion: str = None, 
+                               emotion_vector: dict = None):
+        """
+        [Phase 2 & 3 最终版] 处理分析结果的核心回调函数。
+        重构为：状态感知 -> 向量记录 -> 价值驱动决策 -> 策略执行
+        """
+        # --- 1. UI 层更新 (保持对用户的即时反馈) ---
+        status_text = f"观察到: {behavior_desc} (表面: {emotion})"
+        if complex_emotion:
+            status_text += f" | 深层: {complex_emotion}"
+        self.update_status(status_text)
+        
+        # 更新立绘 (基于表面情绪映射，保持视觉兼容性)
+        self.after(0, self._update_character_portrait, emotion)
+
+        # --- 2. 深度数据记录 (Deep Logging) ---
+        observation = { 
+            "timestamp": timestamp, 
+            "behavior_num": behavior_num, 
+            "behavior_desc": behavior_desc, 
+            "emotion": emotion, 
+            "complex_emotion": complex_emotion, 
+            "vector": emotion_vector, 
+            "analysis": analysis_text 
+        }
+        
+        # 存入短期记忆队列
+        self.observation_history.append(observation)
+        if len(self.observation_history) > 20: self.observation_history.pop(0)
+
+        # 持久化存储 (用于 Phase 4 的每日总结)
+        log_observation_to_file(observation)
+
+        # --- 3. 决策内核 (Decision Core - Quantitative & Value Driven) ---
+        
+        # [Step 1] 状态向量化 (State Vectorization)
+        # 获取符合 MDP 定义的当前状态 S_t
+        current_state = {
+            "ui_emotion": emotion,              # 离散状态
+            "complex_emotion": complex_emotion, # 复合状态
+            # 获取定量的唤醒度标量 (Scalar Arousal, L2 Norm)
+            "arousal": self.webcam_handler.emotion_engine.get_arousal_level()
+        }
+        
+        # [Step 2] 策略评估 (Policy Evaluation)
+        # 计算 Argmax U(a | s)
+        # DecisionMaker 内部包含基于公式的效用计算：U = R_state + R_arousal - C_cost - P_decay
+        print(f"\n[System 2] 正在进行价值决策推演 (Context: {behavior_desc})...")
+        chosen_action = self.decision_maker.evaluate_action_value(current_state, behavior_desc)
+        print(f"[System 2] 决策引擎裁定最优动作: 【{chosen_action}】")
+        
+        # --- 4. 动作执行 (Action Execution) ---
+        
+        if chosen_action == config.ACTIONS.WAIT:
+            # 动作: 静默观察 (No-op)
+            # 此时 AI 认为不打扰用户的期望回报最高
+            pass 
+            
+        elif chosen_action == config.ACTIONS.LIGHT_CARE:
+            # 动作: 轻度干预 (Light Intervention)
+            # 适用于：积极分享、日常陪伴、轻度疲惫
+            # 执行: 发送常规 Prompt，语气轻松
+            self._trigger_care_speech(current_state, behavior_desc, mode="light")
+                
+        elif chosen_action == config.ACTIONS.DEEP_INTERVENTION:
+            # 动作: 深度干预 (Deep Intervention / CBT)
+            # 适用于：高唤醒度焦虑、极度愤怒
+            # 执行: 发送 CBT 专用 Prompt，语气专业冷静
+            self._trigger_care_speech(current_state, behavior_desc, mode="deep")
+
+
+
+
+
+
+
+
+
+    def transcribe_audio(self, audio_file: str):
+        """[回调] VoiceActivityDetector检测到语音后调用此方法。"""
+        self.audio_transcriber.transcribe(audio_file, high_priority=True)
+
+    def handle_transcription_result(self, text: str, high_priority: bool):
+        """[回调] AudioTranscriber完成转录后调用此方法。"""
+        self.add_user_message(text)
+        self._add_to_message_queue(
+            priority=1 if high_priority else 2, # 用户主动说话是最高优先级
+            msg_type="voice_input",
+            content={"text": text}
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # --- 消息队列与后台处理 ---
+    def _process_message_queue(self):
+        """[后台线程] 持续处理消息队列中的任务。"""
+        while self.processing_running:
+            try:
+                #这里非常非常的重要！！！！！
+                # 从队列中获取任务，阻塞直到有任务可用
+                priority, msg_id, message = self.message_queue.get()
+                
+                msg_type = message["type"]
+                content = message["content"]
+                
+                if msg_type == "image_analysis":
+                    self._handle_image_analysis_message(content)
+                elif msg_type == "voice_input":
+                    self._handle_voice_input_message(content)
+                # --- 新增分支：处理主动关怀任务 ---
+                elif msg_type == "special_care_prompt":
+                    self._handle_special_care_message(content)
+                # --- 新增分支：处理每日总结任务 ---
+                elif msg_type == "daily_summary":
+                    self._handle_daily_summary_message()
+                elif msg_type == "action_response": # [新增]
+                    self._handle_image_analysis_message(content)
+
+                self.message_queue.task_done()
+            except Exception as e:
+                print(f"消息队列处理错误: {e}")
+                time.sleep(1)
+
+
+
+
+
+
+
+
+    def _handle_image_analysis_message(self, content: dict):
+        # 1. 提取数据
+        complex_label = content.get("complex_emotion", "")
+        vector_data = content.get("vector", {})
+
+        # [Phase 2 修改] 直接读取决策结果
+        mode = content.get("mode", "light")
+        use_cbt_mode = (mode == "deep")
+        
+        # [Phase 3 新增] 计算情绪强度
+        # 如果 vector_data 为空，强度为0
+        current_arousal = max(vector_data.values()) if vector_data else 0.0
+        
+        # 2. 策略分发 (Strategy Dispatch)
+        is_high_arousal = current_arousal >= config.AROUSAL_THRESHOLD_HIGH
+        is_negative_context = content['emotion'] in config.NEGATIVE_EMOTIONS # 表面也是负面
+        
+        # 判定是否进入 CBT 模式：强度高 且 (表面负面 或 内心焦虑)
+        use_cbt_mode = is_high_arousal and (is_negative_context or "焦虑" in str(complex_label))
+
+        if use_cbt_mode:
+            print(f"!!! 触发 CBT 干预模式 (强度: {current_arousal}) !!!")
+            # --- 策略 A: CBT 干预 ---
+            # 临时构建一个 CBT 专用的上下文
+            # 注意：我们保留一点历史记录，但把 System Prompt 换掉
+            cbt_context = [
+                {"role": "system", "content": config.CBT_SYSTEM_PROMPT}, # 替换为心理咨询师人设
+                # 插入最近的一条用户对话，保持连贯性
+            ] + self.chat_context[-2:] 
+            
+            # 构建用户 Prompt
+            prompt = (
+                f"（系统提示：检测到用户处于高强度情绪状态：{content['emotion']}，强度{current_arousal}。请立即执行CBT干预。）\n"
+                f"用户现在的行为是：{content['behavior_desc']}。"
+            )
+            cbt_context.append({"role": "user", "content": prompt})
+            
+            # 调用 AI (使用临时 context)
+            assistant_reply = self._get_deepseek_response(custom_context=cbt_context)
+            
+            # 记录这次特殊的干预到主历史，以免断片
+            self.chat_context.append({"role": "assistant", "content": f"[CBT介入] {assistant_reply}"})
+
+        else:
+            # --- 策略 B: 常态陪伴 (保持原逻辑) ---
+            # 基础描述
+            base_prompt = f"我刚刚看到溢涛正在'{content['behavior_desc']}'。"
+            emotion_desc = f"表面上看起来情绪是'{content['emotion']}'。"
+            
+            if complex_label and complex_label != content['emotion']:
+                emotion_desc += f"\n但这背后，我察觉到了深层状态：**{complex_label}**。"
+            
+            prompt = (
+                f"{base_prompt}\n{emotion_desc}\n"
+                f"作为朋友婉晴，请根据这个状态给出一句自然的回应。"
+            )
+            
+            self.chat_context.append({"role": "user", "content": prompt})
+            assistant_reply = self._get_deepseek_response()
+
+        # 3. 更新 UI 和 播放语音 (通用逻辑)
+        self.after(0, self.update_placeholder, content["placeholder_id"], f"📷 {content['analysis_text']}", content['screenshot'])
+        self.after(0, self.add_ai_message, assistant_reply)
+        
+        # CBT 模式下，语音优先级最高(0)，普通模式正常(2)
+        priority = 0 if use_cbt_mode else 2
+        self.audio_player.play_text(assistant_reply, priority=priority)
+
+
+
+
+    def _handle_voice_input_message(self, content: dict):
+        """[后台线程] 处理用户语音输入，生成AI回应。"""
+        user_text = content["text"]
+        
+        history_summary = "作为参考，这是我最近5次观察到的你的行为记录：\n"
+        if not self.observation_history:
+            history_summary += "暂无记录。\n"
+        else:
+            for obs in self.observation_history[-5:]:
+                history_summary += (f"- {obs['timestamp'].strftime('%H:%M:%S')}: "
+                                    f"行为是 {obs['behavior_desc']}, 情绪是 {obs['emotion']}\n")
+
+        prompt = f"{history_summary}\n以上是背景信息。现在，请回答我的问题：'{user_text}'"
+        self.chat_context.append({"role": "user", "content": prompt})
+        
+        assistant_reply = self._get_deepseek_response()
+        
+        self.after(0, self.add_ai_message, assistant_reply)
+        self.audio_player.play_text(assistant_reply, priority=1) # 最高优先级播放
+        # --- 新增：语音回应后，恢复立绘为“开心”状态 ---
+        self.after(0, self._update_character_portrait, "开心")
+                
+
+
+
+
+    def _handle_special_care_message(self, content: dict):
+        """[后台线程] 处理特殊的主动关怀消息。"""
+        print("正在生成主动关怀回应...")
+        prompt = content["prompt"]
+        
+        # 我们在这里使用一个临时的、不包含历史记录的上下文，
+        # 因为这是一个由AI主动发起的、全新的对话回合。
+        care_context = [self.system_message, {"role": "user", "content": prompt}]
+        
+        try:
+            response = deepseek_client.chat.completions.create(
+                model="deepseek-chat",
+                messages=care_context,
+                stream=False
+            )
+            reply = response.choices[0].message.content
+            
+            # 将这次主动关怀也记录到主聊天历史中
+            self.chat_context.append({"role": "user", "content": "[AI 主动发起的关怀]"})
+            self.chat_context.append({"role": "assistant", "content": reply})
+
+            # 在主线程中显示并用最高优先级播放
+            self.after(0, self.add_ai_message, reply)
+            self.audio_player.play_text(reply, priority=0) # 优先级0，绝对插队！
+            
+        except Exception as e:
+            print(f"生成主动关怀回应时出错: {e}")
+
+
+
+
+    def _get_deepseek_response(self, custom_context=None) -> str:
+        """调用DeepSeek API。支持传入自定义上下文。"""
+        try:
+            # 决定使用哪个上下文：如果有临时的(CBT)，就用临时的；否则用全局的
+            messages_to_send = custom_context if custom_context else self.chat_context
+            
+            # 长度截断保护 (只针对全局上下文，临时上下文一般很短)
+            if not custom_context and len(messages_to_send) > 10: 
+                messages_to_send = [self.system_message] + messages_to_send[-9:]
+
+            response = deepseek_client.chat.completions.create(
+                model="deepseek-chat", messages=messages_to_send, stream=False
+            )
+            reply = response.choices[0].message.content
+            
+            # 如果是全局模式，记得把回复加回历史记录 (在调用处已经加了，这里只负责返回)
+            # 但为了防止重复添加，我们这里只负责返回 content，添加逻辑交给调用者更灵活
+            # 修正：原逻辑是在这里 append，为了兼容 Phase 3，我们把 append 移出去，或者加个判断
+            
+            # 为了最小化改动，保持原逻辑：如果是默认上下文，在这里 append
+            if not custom_context:
+                self.chat_context.append({"role": "assistant", "content": reply})
+                
+            return reply
+        except Exception as e:
+            print(f"DeepSeek API 错误: {e}")
+            return "（思考中...）"
+
+
+
+
+
+
+    # --- UI更新与辅助方法 ---
+    
+    def _add_to_message_queue(self, priority: int, msg_type: str, content: dict):
+        msg_id = self.message_id_counter
+        self.message_id_counter += 1
+        self.message_queue.put((priority, msg_id, {"type": msg_type, "content": content}))
+
+    def update_status(self, text: str):
+        self.status_label.configure(text=text)
+
+    def add_ai_message(self, text, screenshot=None, is_placeholder=False) -> str:
+        return self._add_chat_message("ai", text, screenshot, is_placeholder)
+
+    def add_user_message(self, text):
+        self._add_chat_message("user", text)
+
+    def _add_chat_message(self, role, text, screenshot=None, is_placeholder=False) -> str:
+        """向聊天窗口添加一条新消息，支持占位符。"""
+        align = "w" if role == "ai" else "e"
+        avatar = self.ai_avatar if role == "ai" else self.user_avatar
+        
+        # --- 关键改动：使用与半透明背景协调的、更暗的纯色 ---
+        bg_color = ("#2B2B2B", "#1F1F1F") if role == "ai" else ("#1D351C", "#142513")
+
+        # 将消息添加到 ScrollableFrame 的主视图中
+        message_frame = ctk.CTkFrame(self.chat_frame, fg_color=bg_color, corner_radius=12)
+        message_frame.grid(row=self.chat_row_counter, column=0, sticky=align, padx=5, pady=4)
+        
+        avatar_col = 0 if role == "ai" else 1
+        content_col = 1 if role == "ai" else 0
+        
+        if avatar:
+            avatar_label = ctk.CTkLabel(message_frame, image=avatar, text="", fg_color="transparent")
+            avatar_label.grid(row=0, column=avatar_col, sticky="n", padx=5, pady=5)
+
+        content_frame = ctk.CTkFrame(message_frame, fg_color="transparent")
+        content_frame.grid(row=0, column=content_col)
+
+        if screenshot:
+            img_resized = screenshot.copy()
+            img_resized.thumbnail((200, 150))
+            ctk_img = ctk.CTkImage(light_image=img_resized, dark_image=img_resized, size=img_resized.size)
+            img_label = ctk.CTkLabel(content_frame, image=ctk_img, text="")
+            img_label.pack(anchor="w", padx=5, pady=2)
+            img_label.image = ctk_img
+
+        text_label = ctk.CTkLabel(content_frame, text=text, wraplength=600, justify="left", anchor="w", fg_color="transparent")
+        text_label.pack(anchor="w", padx=5, pady=5)
+        
+        placeholder_id = ""
+        if is_placeholder:
+            placeholder_id = f"ph_{self.message_id_counter}"
+            self.placeholder_map[placeholder_id] = (message_frame, text_label, None)
+            message_frame.configure(fg_color=("#EAEAEA", "#333333"))
+
+        self.chat_row_counter += 1
+        self.after(100, self.chat_frame._parent_canvas.yview_moveto, 1.0)
+        return placeholder_id
+
+        
+
+    def update_placeholder(self, placeholder_id, new_text, new_screenshot=None):
+        """用真实内容更新占位符消息。"""
+        if placeholder_id in self.placeholder_map:
+            frame, text_label, img_label = self.placeholder_map.pop(placeholder_id)
+            if frame.winfo_exists():
+                frame.configure(fg_color=("#3F3F3F", "#2B2B2B"))
+                text_label.configure(text=new_text)
+
+
+
+
+
+
+
+    def _update_background_image(self, event=None):
+        """[V2版] 使用'防抖'技术，在窗口大小改变停止后才更新背景，避免卡顿。"""
+        # 如果已经有一个更新计划在等待，先取消它
+        if self._after_id:
+            self.after_cancel(self._after_id)
+
+        # 安排一个新的更新计划，在150毫秒后执行
+        self._after_id = self.after(150, self._perform_background_update)
+
+    def _perform_background_update(self):
+        """[V3版] 更新主背景，并通知所有子控件更新它们的透明背景。"""
+        if hasattr(self, 'original_bg_pil_image') and self.winfo_width() > 1:
+            try:
+                win_width, win_height = self.winfo_width(), self.winfo_height()
+                
+                # 1. 缩放主背景图
+                resized_bg_pil = self.original_bg_pil_image.resize((win_width, win_height), Image.Resampling.LANCZOS)
+                
+                # 2. 更新主背景图的显示
+                bg_image = ctk.CTkImage(light_image=resized_bg_pil, dark_image=resized_bg_pil, size=(win_width, win_height))
+                self.background_label.configure(image=bg_image)
+                self.background_label.image = bg_image
+                
+                # 3. 核心：通知所有已注册的透明控件，让它们根据新的主背景图更新自己
+                for widget in self.transparent_widgets:
+                    widget.update_background(resized_bg_pil)
+
+            except Exception as e:
+                # 忽略窗口关闭时可能发生的错误
+                pass
+
+
+
+
+    def _manually_trigger_summary(self):
+        """[新增] 由热键触发，手动开始生成每日总结。"""
+        print(f"快捷键 '{config.SUMMARY_HOTKEY}' 被按下！手动触发每日总结。")
+        
+        # 在UI上显示一个即时反馈
+        # self.after(0, ...) 确保UI更新在主线程中安全执行
+        self.after(0, self.add_ai_message, "收到指令！正在为您准备今日的总结报告...")
+        
+        # 直接调用现有的、能将任务添加到队列的函数
+        # 同样使用 self.after 确保线程安全
+        self.after(0, self._trigger_daily_summary)
+
+
+
+
+
+
+    def on_closing(self):
+        """处理窗口关闭事件，安全地停止所有后台线程。"""
+        print("正在关闭应用...")
+        self.processing_running = False
+        self.webcam_handler.stop()
+        self.voice_detector.stop_monitoring()
+        self.audio_player.stop()
+        self.hotkey_manager.stop_listener() # <-- 添加这一行
+
+
+        # 发送一个虚拟消息来解锁队列的 .get() 阻塞
+        self.message_queue.put((99, 0, {"type": "shutdown", "content": ""}))
+        self.destroy()
+
+
+    def _schedule_daily_summary(self):
+        """计算距离下一个报告时间还有多久，并设置一个定时器。"""
+        now = datetime.now()
+        target_time = now.replace(hour=config.DAILY_SUMMARY_HOUR, minute=config.DAILY_SUMMARY_MINUTE, second=0, microsecond=0)
+
+        # 如果今天的目标时间已经过去，则目标设为明天
+        if now > target_time:
+            target_time = target_time.replace(day=now.day + 1)
+        
+        # 计算距离目标时间的秒数
+        delay_seconds = (target_time - now).total_seconds()
+        
+        print(f"每日总结报告已预定。下一次将在 {target_time.strftime('%Y-%m-%d %H:%M:%S')} (大约 {delay_seconds / 3600:.1f} 小时后) 触发。")
+        
+        # after方法需要毫秒
+        delay_ms = int(delay_seconds * 1000)
+        
+        # 设置定时器，在指定时间后调用 _trigger_daily_summary
+        self.after(delay_ms, self._trigger_daily_summary)
+
+
+
+# ai_assistant/apps/multimedia_assistant.py
+
+    def _handle_daily_summary_message(self):
+        """
+        [Phase 4 终极版] 基于 Plutchik 向量数据的深度心理总结。
+        """
+        today_str = datetime.now().strftime('%Y-%m-%d')
+        log_file_path = f'observation_log_{today_str}.jsonl'
+
+        print(f"正在读取日志文件: {log_file_path}")
+        
+        # --- 1. 数据统计容器 ---
+        total_records = 0
+        emotion_counts = {} # 统计各基础情绪出现次数
+        complex_emotion_counts = {} # 统计复合情绪 (爱, 焦虑...)
+        arousal_sum = 0.0 # 用于计算平均唤醒度/压力值
+        behavior_emotion_map = {} # 行为与情绪的关联分析
+        
+        raw_lines = []
+
+        try:
+            if not os.path.exists(log_file_path):
+                self.after(0, self.add_ai_message, "帆哥，今天好像还没有产生日志数据，没法写日记哦。")
+                return
+
+            with open(log_file_path, 'r', encoding='utf-8') as f:
+                raw_lines = f.readlines()
+
+            # --- 2. 深度数据分析 ---
+            for line in raw_lines:
+                try:
+                    data = json.loads(line)
+                    total_records += 1
+                    
+                    # 提取关键指标
+                    vec = data.get('vector', {})
+                    complex_e = data.get('complex_emotion')
+                    behavior = data.get('behavior_desc', '未知')
+                    
+                    # A. 计算唤醒度 (Arousal) - 取向量最大值
+                    if vec:
+                        current_arousal = max(vec.values())
+                        arousal_sum += current_arousal
+                        
+                        # B. 统计主导情绪
+                        dominant = max(vec, key=vec.get)
+                        emotion_counts[dominant] = emotion_counts.get(dominant, 0) + 1
+                        
+                        # C. 行为-情绪 关联分析 (简单的共现统计)
+                        if behavior not in behavior_emotion_map:
+                            behavior_emotion_map[behavior] = []
+                        behavior_emotion_map[behavior].append(dominant)
+
+                    # D. 统计复合情绪 (这是重点)
+                    if complex_e:
+                        complex_emotion_counts[complex_e] = complex_emotion_counts.get(complex_e, 0) + 1
+                        
+                except Exception as e:
+                    continue # 跳过损坏的行
+
+            if total_records == 0:
+                self.after(0, self.add_ai_message, "今天的记录好像是空的？")
+                return
+
+            # --- 3. 生成统计结论 ---
+            avg_arousal = arousal_sum / total_records
+            
+            # 找出出现频率最高的情绪
+            top_emotions = sorted(emotion_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+            top_complex = sorted(complex_emotion_counts.items(), key=lambda x: x[1], reverse=True)[:3]
+            
+            # 构建统计文本
+            stats_summary = (
+                f"- 总记录数: {total_records}条\n"
+                f"- 平均情绪唤醒度(压力值): {avg_arousal:.2f}/10.0\n"
+                f"- 最常出现的基础情绪: {', '.join([k for k,v in top_emotions])}\n"
+            )
+            
+            if top_complex:
+                stats_summary += f"- **检测到的深层状态**: {', '.join([f'{k}({v}次)' for k,v in top_complex])}\n"
+            
+            # 简单的行为关联洞察
+            insight_text = ""
+            for beh, emos in behavior_emotion_map.items():
+                # 简单计算该行为下最高频的情绪
+                if len(emos) > 5: # 样本够多才分析
+                    most_common = max(set(emos), key=emos.count)
+                    insight_text += f"- 当你在'{beh}'时，最常见的情绪是'{most_common}'。\n"
+
+            # --- 4. 构建 AI Prompt ---
+            summary_prompt = (
+                "你是一位专业的心理健康辅助AI（婉晴）。现在是由于一天的结束，请根据以下【客观行为与情感数据】，"
+                "为用户（溢涛）生成一份温暖、深刻的【每日心理复盘】。\n\n"
+                "【今日数据统计】\n"
+                f"{stats_summary}\n"
+                "【行为关联洞察】\n"
+                f"{insight_text}\n\n"
+                "【写作要求】\n"
+                "1. **不要**罗列枯燥的数据，而是把数据转化为故事和关心。\n"
+                "2. 如果平均压力值超过 6.0，或者出现了'焦虑'，请重点安抚并给出建议。\n"
+                "3. 如果出现了'爱'或'乐观'，请肯定这一天。\n"
+                "4. 结合行为洞察，给他一些明天的行动建议（比如：我看你工作时容易焦虑，明天要不要...）。\n"
+                "5. 语气要像老朋友写信，温暖、真诚。"
+            )
+
+            print("正在生成深度心理总结...")
+            self.after(0, self.add_ai_message, "溢涛，我正在分析你今天的情感数据，为你生成心理复盘报告...")
+
+            # --- 5. 调用 AI ---
+            # 使用临时的 context，不污染短期记忆
+            summary_context = [
+                {"role": "system", "content": config.CBT_SYSTEM_PROMPT}, # 借用CBT的专业人设
+                {"role": "user", "content": summary_prompt}
+            ]
+            
+            response = deepseek_client.chat.completions.create(
+                model="deepseek-chat", messages=summary_context
+            )
+            summary_reply = response.choices[0].message.content
+
+            # --- 6. 展示与播报 ---
+            self.chat_context.append({"role": "assistant", "content": f"[每日总结] {summary_reply}"})
+            self.after(0, self.add_ai_message, summary_reply)
+            self.audio_player.play_text(summary_reply, priority=0)
+
+        except Exception as e:
+            print(f"生成总结出错: {e}")
+            import traceback
+            traceback.print_exc()
+            self.after(0, self.add_ai_message, "生成总结时出了一点小差错，明天再试吧。")
+
+
+    def _on_send_text_message(self):
+        """[新增] 当点击“发送”按钮或按回车时调用。"""
+        user_text = self.chat_entry.get()
+        
+        # 如果输入为空，则不执行任何操作
+        if not user_text.strip():
+            return
+            
+        # 1. 清空输入框
+        self.chat_entry.delete(0, "end")
+        
+        # 2. 在UI上显示用户自己的消息
+        self.add_user_message(user_text)
+        
+        # 3. 将文本消息添加到处理队列，与语音输入使用相同的逻辑
+        self._add_to_message_queue(
+            priority=1, # 用户主动输入，优先级高
+            msg_type="voice_input", # 复用语音输入的处理逻辑
+            content={"text": user_text}
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    #新的方法-计算时间
+    def _trigger_daily_summary(self):
+        """
+        [主线程调用] 定时器触发此方法，开始生成报告。
+        """
+        print("时间到！开始生成每日总结报告...")
+        
+        # 将生成报告的耗时任务放入消息队列，避免阻塞UI
+        self._add_to_message_queue(
+            priority=1, # 报告是比较重要的任务
+            msg_type="daily_summary",
+            content={} # 目前不需要额外内容
+        )
+        
+        # 生成完今天的报告后，立即重新预定明天的报告
+        self._schedule_daily_summary()
+
+    def _trigger_care_speech(self, state, behavior, mode="light"):
+        """
+        [Phase 2] 执行说话动作。
+        mode="light": 普通朋友语气
+        mode="deep": 心理咨询师语气 (CBT)
+        """
+        # [修复] 从 webcam_handler 获取真实的情感引擎数据
+        # 还要注意：current_state 现在是 numpy 数组，需要转成 dict 才能传给 JSON
+        engine = self.webcam_handler.emotion_engine
+        vector_dict = engine.get_current_state_dict()
+
+        # 构建一个临时的 content 结构传给队列
+        content = {
+            "behavior_desc": behavior,
+            "emotion": state['ui_emotion'],
+            "complex_emotion": state['complex_emotion'],
+            "vector": vector_dict, # [修复完毕]
+            "mode": mode 
+        }
+        
+        # 使用特殊类型 action_response
+        self._add_to_message_queue(
+            priority=0 if mode == "deep" else 1,
+            msg_type="action_response", 
+            content=content
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+def main():
+    """应用的入口函数。"""
+    app = MultimediaAssistantApp()
+    app.protocol("WM_DELETE_WINDOW", app.on_closing)
+    app.mainloop()
+#程序从此进入了事件循环，开始监听鼠标点击、键盘输入和我们设定的各种定时任务。
+
+
+
+#     "WM_DELETE_WINDOW" (协议名)：
+# 这是最常用的一个协议名称。
+# 它代表了窗口管理器发送的一个标准消息，其含义是：“用户点击了窗口右上角的 X (关闭) 按钮”。
+# 在 Tkinter 的底层，这实际上是截获了 X Window System 或 Windows API 中的一个特定系统信号。
+# app.on_closing (回调函数)：
+# 这是我们在 MultimediaAssistantApp 类中自定义的一个方法。
+# 它的作用是告诉程序：“当收到 WM_DELETE_WINDOW 消息时，不要执行默认的关闭动作，请转而去执行 app.on_closing 这个方法。”
+
+
+
+
+# 如果你不用 protocol：
+# 用户点击 X 按钮，窗口会瞬间消失。
+# 但是，程序底层的后台线程（比如摄像头捕捉线程、语音监听线程、热键监听线程）并不会自动停止。
+# 结果：程序虽然看似关闭了，但在后台仍有进程在运行，甚至可能导致摄像头或麦克风被占用，造成资源泄露或程序卡死。
+# 使用了 app.protocol("WM_DELETE_WINDOW", app.on_closing) 之后：
+
+========================================
+FILE_PATH: ai_assistant\apps\ui_setup.py
+========================================
+
+
+import customtkinter as ctk
+from PIL import Image
+import os
+from ai_assistant.ui.custom_widgets import TransparentFrame
+
+def setup_main_ui(app):
+    """
+    配置主窗口UI布局 (V7版)
+    """
+    # ... (背景图片设置部分保持不变) ...
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        assets_path = os.path.join(script_dir, '..', 'assets')
+        bg_path = os.path.join(assets_path, 'background.png')
+        app.original_bg_pil_image = Image.open(bg_path)
+        app.background_label = ctk.CTkLabel(app, text="")
+        app.background_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+    except Exception as e:
+        print(f"警告: 加载背景图片失败: {e}")
+
+    app.grid_columnconfigure(0, weight=1)
+    app.grid_rowconfigure(0, weight=1)
+    main_frame = ctk.CTkFrame(app, fg_color="transparent")
+    main_frame.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+    main_frame.grid_columnconfigure(0, weight=1)
+    main_frame.grid_columnconfigure(1, weight=3)
+    main_frame.grid_rowconfigure(0, weight=1)
+
+    # --- 1. 左侧立绘区域 (已修正) ---
+    app.portrait_frame = TransparentFrame(main_frame, corner_radius=10, transparency=0.7)
+    app.portrait_frame.grid(row=0, column=0, sticky="nsew", padx=(0, 5), pady=0)
+    
+    # 配置 portrait_frame 内部的 grid, 让其子控件可以填充
+    app.portrait_frame.grid_columnconfigure(0, weight=1)
+    app.portrait_frame.grid_rowconfigure(0, weight=1)
+    # 创建真正用于显示立绘的 Label 控件
+    app.portrait_label = ctk.CTkLabel(app.portrait_frame, text="", fg_color="transparent")
+    app.portrait_label.grid(row=0, column=0, sticky="nsew", padx=10, pady=10)
+
+
+    # --- 2. 右侧交互区域 (保持 V6 的稳定 pack 布局) ---
+    right_frame = ctk.CTkFrame(main_frame, fg_color="transparent")
+    right_frame.grid(row=0, column=1, sticky="nsew", padx=(5, 0), pady=0)
+    
+    # 2.1 校徽 (放在最上面)
+    emblem_frame = ctk.CTkFrame(right_frame, fg_color="transparent")
+    emblem_frame.pack(side="top", fill="x", pady=(0, 5))
+    try:
+        # ... (校徽加载代码不变) ...
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        assets_path = os.path.join(script_dir, '..', 'assets')
+        emblem_path = os.path.join(assets_path, 'school_emblem.png')
+        emblem_original_image = Image.open(emblem_path)
+        original_width, original_height = emblem_original_image.size
+        target_height = 50
+        aspect_ratio = original_width / original_height
+        target_width = int(target_height * aspect_ratio)
+        app.school_emblem_img = ctk.CTkImage(light_image=emblem_original_image, dark_image=emblem_original_image, size=(target_width, target_height))
+        emblem_label = ctk.CTkLabel(emblem_frame, image=app.school_emblem_img, text="")
+        emblem_label.pack(side="right", padx=10)
+    except Exception as e:
+        print(f"警告: 加载校徽失败: {e}")
+
+    # 2.4 状态栏 (放在最下面)
+    app.status_frame = TransparentFrame(right_frame, corner_radius=0, transparency=0.8)
+    app.status_frame.pack(side="bottom", fill="x", pady=(5, 0))
+    app.status_label = ctk.CTkLabel(app.status_frame, text="正在初始化...", anchor="w", fg_color="transparent")
+    app.status_label.pack(side="left", padx=10, pady=5)
+
+    # 2.3 聊天输入区 (放在状态栏的上面)
+    chat_input_frame = TransparentFrame(right_frame, corner_radius=10, transparency=0.8)
+    chat_input_frame.pack(side="bottom", fill="x", pady=(5, 0))
+    chat_input_frame.grid_columnconfigure(0, weight=1)
+    app.chat_entry = ctk.CTkEntry(chat_input_frame, placeholder_text="在这里输入你想说的话...", height=40)
+    app.chat_entry.grid(row=0, column=0, sticky="ew", padx=10, pady=10)
+    app.send_button = ctk.CTkButton(chat_input_frame, text="发送", width=80, height=40, command=app._on_send_text_message)
+    app.send_button.grid(row=0, column=1, sticky="e", padx=(0, 10), pady=10)
+    app.chat_entry.bind("<Return>", lambda event: app.send_button.invoke())
+
+    # 2.2 对话记录区 (最后填充所有剩余空间)
+    app.chat_frame = ctk.CTkScrollableFrame(right_frame, label_text="对话记录", fg_color="transparent")
+    app.chat_frame_background = TransparentFrame(app.chat_frame, corner_radius=10, transparency=0.85)
+    app.chat_frame_background.place(relx=0, rely=0, relwidth=1, relheight=1)
+    app.chat_frame.pack(side="top", fill="both", expand=True)
+
+    # 加载头像
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        assets_path = os.path.join(script_dir, '..', 'assets')
+        ai_avatar_path = os.path.join(assets_path, 'ai_avatar.png')
+        user_avatar_path = os.path.join(assets_path, 'user_avatar.png')
+        
+        if not os.path.exists(ai_avatar_path) or not os.path.exists(user_avatar_path):
+            raise FileNotFoundError("头像文件未在 assets 目录中找到。")
+            
+        app.ai_avatar = ctk.CTkImage(Image.open(ai_avatar_path), size=(40, 40))
+        app.user_avatar = ctk.CTkImage(Image.open(user_avatar_path), size=(40, 40))
+        print("头像文件加载成功。")
+
+    except Exception as e:
+        print(f"警告: 加载头像文件失败: {e}。将不显示头像。")
+        # 即使失败，也要创建变量并设为None，防止程序崩溃
+        app.ai_avatar = None
+        app.user_avatar = None
+
+
+
+
+    app.chat_row_counter = 0
+
+    app.transparent_widgets = [
+        app.portrait_frame,
+        app.chat_frame_background,
+        chat_input_frame,
+        app.status_frame
+    ]
+
+========================================
+FILE_PATH: ai_assistant\apps\__init__.py
+========================================
+
+
+
+========================================
+FILE_PATH: ai_assistant\core\api_clients.py
+========================================
+
+# ai_assistant/core/api_clients.py
+
+
+# 你以为的过程: 手动建立HTTP连接 -> 设置请求头(Header) -> 把API Key放进去 -> 把图片URL和Prompt打包成JSON格式 -> 发送请求 -> 等待服务器响应 -> 解析返回的JSON数据 -> 处理可能出现的网络错误...
+# 实际的过程: completion = qwen_client.chat.completions.create(...)
+
+#SDK大哥：
+# qwen_client.chat.completions.create(...) 这一步又做了什么？
+# 当你调用这个.create()方法时，SDK在“幕后”为你做了所有的事情：
+# 它根据你传入的model和messages参数，自动构建一个符合API规范的HTTP POST请求。
+# 它自动把你的api_key添加到请求头里进行身份验证。
+# 它通过底层的网络库（如requests或httpx）把这个请求发送到你配置的base_url。
+# 它同步等待服务器处理并返回结果。
+# 收到服务器返回的JSON数据后，它会将其解析成一个方便你使用的Python对象（所以你可以用.choices[0].message.content来访问）。
+# 如果网络出错了或者API返回了错误码，它还会抛出异常，方便你捕获。
+
+import os
+import httpx
+from openai import OpenAI
+import oss2
+import dashscope
+from funasr import AutoModel
+
+# --- 关键修正：在程序启动时，从根源上禁用系统代理 ---
+# 这几行代码会清除掉所有可能影响网络请求的代理环境变量。
+# 这样，后续的所有库（openai, httpx等）在运行时，
+# 都会认为“本机没有代理”，从而直接进行网络连接。
+os.environ['HTTP_PROXY'] = ''
+os.environ['HTTPS_PROXY'] = ''
+os.environ['ALL_PROXY'] = ''
+
+# 从我们自己的配置模块导入所有配置信息
+from ai_assistant.utils import config
+
+# --- OpenAI-Compatible API Clients ---
+# 现在，我们不再需要任何复杂的http_client参数，
+# 因为代理问题已经在上面被彻底解决了。
+# 我们恢复使用最标准、最干净的初始化方式。
+
+# DeepSeek Client (用于语言模型对话)
+deepseek_client = OpenAI(
+    api_key=config.DEEPSEEK_API_KEY,
+    base_url=config.DEEPSEEK_BASE_URL,
+)
+
+# Qwen-VL Client (用于视觉语言模型分析图像)
+qwen_client = OpenAI(
+    api_key=config.QWEN_API_KEY,
+    base_url=config.QWEN_BASE_URL,
+)
+
+# --- Alibaba Cloud Services ---
+
+# TTS (文本转语音) API Key
+dashscope.api_key = config.QWEN_API_KEY
+
+# OSS (对象存储服务)
+# 修正：oss2.Bucket的第一个参数应该是auth对象
+auth = oss2.Auth(config.OSS_ACCESS_KEY_ID, config.OSS_ACCESS_KEY_SECRET)
+oss_bucket = oss2.Bucket(auth, config.OSS_ENDPOINT, config.OSS_BUCKET)
+
+
+# --- Local AI Models ---
+
+# ASR (自动语音识别) Model from FunASR
+asr_model = None
+try:
+    # 确保FunASR也不会受到代理影响
+    os.environ['NO_PROXY'] = '*'
+    asr_model = AutoModel(
+        model=config.ASR_MODEL_DIR,
+        trust_remote_code=True,
+        vad_model="fsmn-vad",
+        vad_kwargs={"max_single_segment_time": 30000},
+        device="cuda:0", # 如果你没有NVIDIA显卡，请改为 "cpu"
+    )
+    print("ASR模型加载成功。")
+except Exception as e:
+    print(f"警告：ASR模型加载失败，语音识别功能将不可用。错误: {e}")
+    asr_model = None
+finally:
+    # 恢复环境变量，避免影响其他可能的进程
+    os.environ.pop('NO_PROXY', None)
+
+========================================
+FILE_PATH: ai_assistant\core\audio_processing.py
+========================================
+
+# ai_assistant/core/audio_processing.py
+
+import pyaudio
+import wave
+import threading
+import queue
+import time
+import os
+import numpy as np
+from pydub import AudioSegment
+from pydub.playback import play
+from dashscope.audio.tts_v2 import SpeechSynthesizer
+
+# 从我们自己的包里导入模块
+from ai_assistant.utils import config
+from ai_assistant.utils.helpers import extract_language_emotion_content
+from ai_assistant.core.api_clients import asr_model
+
+
+# 如何替换TTS服务？(比如换成微软Azure)
+# 安装新SDK: pip install azure-cognitiveservices-speech
+# 修改config.py: 添加Azure的API Key和Region。
+# 修改AudioPlayer类中的合成逻辑:
+
+
+
+class AudioPlayer:
+    """
+    处理文本转语音（TTS）和音频播放的类。
+    使用带优先级的队列来管理播放请求，确保重要回复（如用户提问）能插队。
+    """
+    def __init__(self, app):
+        self.app = app
+        self.playing = False
+        self.play_thread = None
+        self.skip_requested = False
+        self.tts_queue = queue.PriorityQueue()
+        self.tts_thread = None
+        self.tts_running = False
+        self.max_queue_size = 2 # 允许缓存少量消息
+
+    def start_tts_thread(self):
+        """启动后台TTS处理线程。"""
+        if not self.tts_running:
+            self.tts_running = True
+            self.tts_thread = threading.Thread(target=self._process_tts_queue)
+            self.tts_thread.daemon = True
+            self.tts_thread.start()
+            print("TTS处理线程已启动。")
+
+    def _process_tts_queue(self):
+        """[后台线程] 持续从队列中获取任务并处理。"""
+        while self.tts_running:
+            try:
+                # 仅在当前没有音频播放时才获取新任务
+                if not self.tts_queue.empty() and not self.playing:
+                    priority, timestamp, text = self.tts_queue.get()
+                    
+                    # 忽略过时的低优先级消息 (例如超过15秒的图像分析反馈)
+                    if priority > 1 and (time.time() - timestamp) > 15:
+                        self.tts_queue.task_done()
+                        continue
+                    
+                    self._synthesize_and_play(text)
+                    self.tts_queue.task_done()
+                time.sleep(0.1)
+            except Exception as e:
+                print(f"处理TTS队列时出错: {e}")
+
+    def play_text(self, text: str, priority=2):
+        """将文本添加到播放队列。priority=1为最高优先级。"""
+        if not text or not text.strip():
+            return
+        # 如果是高优先级请求或队列已满，清理旧任务
+        if priority == 1 or self.tts_queue.qsize() >= self.max_queue_size:
+            self._clean_queue(priority)
+        
+        if not self.tts_running or not self.tts_thread or not self.tts_thread.is_alive():
+            self.start_tts_thread()
+            
+        self.tts_queue.put((priority, time.time(), text))
+
+    def _clean_queue(self, new_priority: int):
+        """根据新消息的优先级清理队列。"""
+        if self.tts_queue.empty():
+            return
+        # 最高优先级消息会清空整个队列
+        if new_priority == 1:
+            while not self.tts_queue.empty():
+                try:
+                    self.tts_queue.get_nowait()
+                    self.tts_queue.task_done()
+                except queue.Empty:
+                    pass
+        # 普通消息只会移除最旧的一个以腾出空间
+        else:
+             while self.tts_queue.qsize() >= self.max_queue_size:
+                try:
+                    self.tts_queue.get_nowait()
+                    self.tts_queue.task_done()
+                except queue.Empty:
+                    break
+
+    def _synthesize_and_play(self, text: str):
+        """[TTS线程调用] 合成语音并调用内部播放器。"""
+        self.app.update_status("正在合成语音...")
+        # 标记正在播放，这会暂停VAD的语音检测
+        self.app.is_playing_audio = True
+        try:
+            synthesizer = SpeechSynthesizer(model=config.TTS_MODEL, voice=config.TTS_VOICE)
+            audio = synthesizer.call(text)
+            
+            if not audio:
+                raise ValueError("TTS API返回了空音频数据")
+            
+            output_file = f'output_{int(time.time())}.mp3'
+            with open(output_file, 'wb') as f:
+                f.write(audio)
+            
+            self._play_audio_file_internal(output_file)
+        except Exception as e:
+            print(f"TTS错误: {e}")
+            self.app.is_playing_audio = False # 合成失败，恢复VAD
+
+    def _play_audio_file_internal(self, file_path: str):
+        """准备并启动一个新线程来播放音频文件。"""
+        if self.playing:
+            self.skip_current() # 确保旧的播放任务被请求停止
+            if self.play_thread and self.play_thread.is_alive():
+                self.play_thread.join(timeout=1.0)
+        
+        self.skip_requested = False
+        self.playing = True
+        self.app.is_playing_audio = True
+        
+        self.play_thread = threading.Thread(target=self._play_audio_worker, args=(file_path,))
+        self.play_thread.daemon = True
+        self.play_thread.start()
+
+    def _play_audio_worker(self, file_path: str):
+        """[播放线程] 实际执行音频播放的线程，已修正为非阻塞。"""
+        self.app.update_status("正在播放语音...")
+        player_process = None
+        try:
+            if not os.path.exists(file_path) or os.path.getsize(file_path) == 0:
+                raise FileNotFoundError(f"音频文件无效或为空: {file_path}")
+
+            sound = AudioSegment.from_file(file_path, format="mp3")
+
+            # --- 关键修正：将阻塞的play()放入子线程 ---
+            player_process = threading.Thread(target=play, args=(sound,), daemon=True)
+            player_process.start()
+
+            # 循环检查播放是否结束或是否被请求跳过
+            while player_process.is_alive() and not self.skip_requested:
+                time.sleep(0.1)
+            
+            if self.skip_requested:
+                print("音频播放已被跳过。")
+            else:
+                print("音频播放自然结束。")
+            # 注意：pydub的play没有直接的.stop()方法，我们通过不再等待线程来“跳过”。
+            # --- 修正结束 ---
+
+        except Exception as e:
+            print(f"音频播放错误: {e}")
+            self.app.update_status("音频播放失败")
+        finally:
+            self.playing = False
+            self.app.is_playing_audio = False
+            self.skip_requested = False # 重置跳过状态
+            self.app.update_status("就绪")
+            try:
+                # 播放结束后清理临时文件
+                if os.path.exists(file_path) and file_path.startswith('output_'):
+                    os.remove(file_path)
+            except Exception as e:
+                print(f"删除临时音频文件出错: {e}")
+
+    def skip_current(self):
+        """请求跳过当前正在播放的音频。"""
+        if self.playing:
+            print("已请求跳过当前音频。")
+            self.skip_requested = True
+
+    def stop(self):
+        """停止所有音频活动。"""
+        self.tts_running = False
+        self.skip_current()
+        self._clean_queue(new_priority=1) # 清空队列
+        if self.tts_thread and self.tts_thread.is_alive():
+            self.tts_thread.join(timeout=1.0)
+        if self.play_thread and self.play_thread.is_alive():
+            self.play_thread.join(timeout=1.0)
+        print("AudioPlayer 已成功停止。")
+
+
+class VoiceActivityDetector:
+    """使用能量阈值进行连续语音活动检测 (VAD)。"""
+    def __init__(self, app):
+        self.app = app
+        self.running = False
+        self.listening_thread = None
+        
+        # VAD 参数
+        self.energy_threshold = 100.0  # 初始阈值，将在校准后更新
+        self.silence_duration_threshold = 0.8  # 超过0.8秒的静默则认为一句话结束
+        self.min_speech_duration = 0.3 # 短于0.3秒的语音被忽略
+        
+        # 状态变量
+        self.is_speaking = False
+        self.speech_start_time = 0
+        self.silence_start_time = 0
+        self.speech_frames = []
+        
+        # PyAudio对象
+        self.audio = None
+        self.stream = None
+        
+        # 校准参数
+        self.is_calibrating = True
+        self.calibration_duration = 2.0 # 2秒校准时间
+
+    def start_monitoring(self):
+        if not self.running:
+            self.running = True
+            self.listening_thread = threading.Thread(target=self._monitor_audio_loop)
+            self.listening_thread.daemon = True
+            self.listening_thread.start()
+            print("语音活动检测已启动。")
+
+    def stop_monitoring(self):
+        self.running = False
+        if self.listening_thread and self.listening_thread.is_alive():
+            self.listening_thread.join(timeout=1.0)
+        self._close_stream()
+        print("语音活动检测已停止。")
+
+    def _close_stream(self):
+        """安全地关闭PyAudio流和实例。"""
+        try:
+            if self.stream:
+                self.stream.stop_stream()
+                self.stream.close()
+            if self.audio:
+                self.audio.terminate()
+        except Exception as e:
+            print(f"关闭音频流时出错: {e}")
+        finally:
+            self.stream, self.audio = None, None
+
+    def _calculate_energy(self, audio_data: bytes) -> float:
+        """计算音频块的能量（均方根）。"""
+        data = np.frombuffer(audio_data, dtype=np.int16)
+        return np.sqrt(np.mean(np.square(data.astype(np.float64)))) if data.size > 0 else 0
+
+    def _monitor_audio_loop(self):
+        """[后台线程] VAD的主循环。"""
+        try:
+            self.audio = pyaudio.PyAudio()
+            self.stream = self.audio.open(
+                format=pyaudio.paInt16, channels=config.AUDIO_CHANNELS,
+                rate=config.AUDIO_RATE, input=True,
+                frames_per_buffer=config.AUDIO_CHUNK
+            )
+            self._calibrate_microphone()
+        except Exception as e:
+            print(f"初始化PyAudio失败: {e}")
+            self.app.update_status("错误: 麦克风初始化失败")
+            return
+
+        while self.running:
+            try:
+                # 如果系统正在播放音频，则暂停检测
+                if self.app.is_playing_audio:
+                    time.sleep(0.1)
+                    continue
+
+                audio_data = self.stream.read(config.AUDIO_CHUNK, exception_on_overflow=False)
+                energy = self._calculate_energy(audio_data)
+
+                is_speech = energy > self.energy_threshold
+
+                if is_speech: # 检测到语音
+                    if not self.is_speaking:
+                        self.is_speaking = True
+                        self.speech_start_time = time.time()
+                        self.speech_frames = []
+                        self.app.update_status("检测到语音输入...")
+                    self.silence_start_time = 0
+                    self.speech_frames.append(audio_data)
+                
+                elif self.is_speaking: # 语音后的静默
+                    if self.silence_start_time == 0:
+                        self.silence_start_time = time.time()
+                    
+                    if (time.time() - self.silence_start_time) > self.silence_duration_threshold:
+                        self._process_detected_speech()
+
+            except IOError as e:
+                # 忽略输入溢出错误，但打印提示
+                if e.errno == -9981:
+                    print("警告: 音频输入溢出，忽略一帧。")
+                else:
+                    print(f"音频监测IO错误: {e}")
+                    time.sleep(0.5)
+            except Exception as e:
+                print(f"音频监测循环未知错误: {e}")
+                time.sleep(0.5)
+        self._close_stream()
+
+    def _calibrate_microphone(self):
+        """在开始时测量环境噪音以设定动态阈值。"""
+        self.app.update_status("校准麦克风中，请保持安静...")
+        noise_levels = []
+        start_time = time.time()
+        while time.time() - start_time < self.calibration_duration:
+            try:
+                audio_data = self.stream.read(config.AUDIO_CHUNK)
+                noise_levels.append(self._calculate_energy(audio_data))
+            except IOError: # 忽略校准期间的溢出
+                pass
+        
+        if noise_levels:
+            avg_noise = np.mean(noise_levels)
+            # 阈值设置为平均噪音的3倍，但至少为50
+            self.energy_threshold = max(50.0, avg_noise * 3.0)
+            status_msg = f"语音监测已启动 (阈值: {self.energy_threshold:.1f})"
+            print(status_msg)
+            self.app.update_status(status_msg)
+        else:
+             self.app.update_status("语音监测启动 (校准失败)")
+        self.is_calibrating = False
+
+    def _process_detected_speech(self):
+        """处理检测到的一段完整语音。"""
+        speech_duration = time.time() - self.speech_start_time
+        if speech_duration >= self.min_speech_duration and self.speech_frames:
+            frames_copy = self.speech_frames.copy()
+            # 在新线程中保存和转录，以防阻塞VAD循环
+            threading.Thread(target=self._save_and_request_transcription, args=(frames_copy,), daemon=True).start()
+
+        # 重置状态，准备下一次检测
+        self.is_speaking = False
+        self.silence_start_time = 0
+        self.speech_frames = []
+        if not self.app.is_playing_audio: self.app.update_status("就绪")
+
+    def _save_and_request_transcription(self, frames: list):
+        """将音频帧保存到WAV文件，并回调主应用来处理转录。"""
+        temp_filename = f"speech_{int(time.time())}.wav"
+        
+        try:
+            with wave.open(temp_filename, 'wb') as wf:
+                wf.setnchannels(config.AUDIO_CHANNELS)
+                # pyaudio.get_sample_size() 需要一个PyAudio实例
+                pa = pyaudio.PyAudio()
+                wf.setsampwidth(pa.get_sample_size(pyaudio.paInt16))
+                pa.terminate()
+                wf.setframerate(config.AUDIO_RATE)
+                wf.writeframes(b''.join(frames))
+            
+            # 回调主应用，让它决定如何处理这个音频文件
+            self.app.transcribe_audio(temp_filename)
+        except Exception as e:
+            print(f"保存WAV文件时出错: {e}")
+
+class AudioTranscriber:
+    """
+处理音频文件转录的专用类。
+ASR (语音转文字): asr_model = AutoModel(...)
+这是本地模型。funasr这个库非常强大。当你执行这行代码时，它做了：
+加载模型文件: 它会去你指定的config.ASR_MODEL_DIR目录下，找到所有巨大的模型文件（通常几百MB甚至更大）。
+构建神经网络: 它在内存（或GPU显存，因为你设置了device="cuda:0"）中构建起一个复杂的深度学习模型结构。
+初始化组件: 它还加载了辅助模型，比如用于断句的VAD模型(fsmn-vad)。
+所以，这行代码的背后是大量的本地计算和资源加载。一旦加载完成，asr_model就是一个功能完备的本地语音识别引擎，
+调用它的.generate()方法就可以直接处理音频文件，完全不需要网络。
+    """
+
+    def __init__(self, app):
+        self.app = app
+
+    def transcribe(self, audio_file: str, high_priority: bool):
+        """将指定的音频文件发送给ASR模型进行转录。"""
+        if not asr_model:
+            self.app.update_status("错误: ASR模型未加载")
+            if os.path.exists(audio_file): os.remove(audio_file)
+            return
+        
+        self.app.update_status("正在转录语音...")
+        try:
+            if not os.path.exists(audio_file) or os.path.getsize(audio_file) == 0:
+                raise FileNotFoundError(f"音频文件无效: {audio_file}")
+                
+            res = asr_model.generate(input=audio_file, cache={})
+            
+            if res and "text" in res[0]:
+                raw_text = res[0]["text"]
+                extracted_text = extract_language_emotion_content(raw_text)
+                
+                if extracted_text and len(extracted_text.strip()) > 1:
+                    # 将结果回调给主应用处理
+                    self.app.handle_transcription_result(extracted_text, high_priority)
+                else:
+                    self.app.update_status("检测到噪音或无意义语音，已忽略")
+            else:
+                self.app.update_status("未检测到有效语音")
+
+        except Exception as e:
+            print(f"转录时发生错误: {e}")
+            self.app.update_status("转录失败")
+        finally:
+            # 确保临时文件被删除
+            if os.path.exists(audio_file) and audio_file.startswith("speech_"):
+                try:
+                    os.remove(audio_file)
+                except Exception as e:
+                    print(f"删除临时语音文件时出错: {e}")
+
+========================================
+FILE_PATH: ai_assistant\core\decision_maker.py
+========================================
+
+# ai_assistant/core/decision_maker.py
+
+import time
+import math
+import numpy as np
+from ai_assistant.utils import config
+
+class DecisionMaker:
+    """
+    [Phase X 最终版] 自适应效用决策引擎 (Adaptive Utility Decision Engine)。
+    集成特征：
+    1. 确定性效用计算 (Deterministic Utility)
+    2. 在线反馈学习 (Online Feedback Learning) - 根据用户反应动态调整策略权重
+    """
+    def __init__(self):
+        self.last_action_time = {} 
+        self.last_state_snapshot = None # 记录上一次决策时的状态，用于对比
+        self.last_action_taken = None   # 记录上一次采取的动作
+        
+        # 动态权重调整矩阵 (Memory)
+        # 用于存储对 REWARD_CONFIG 的修正值 (Delta)
+        # 格式: { (state_key, action): delta_score }
+        self.adaptive_weights = {} 
+
+    def evaluate_action_value(self, current_state: dict, behavior: str) -> str:
+        """
+        Step 1: 评估并决策
+        """
+        # --- [新增] 反馈学习环节 ---
+        # 在做新决策前，先看一眼上一次决策的效果好不好
+        if self.last_state_snapshot and self.last_action_taken != config.ACTIONS.WAIT:
+            self._learn_from_feedback(self.last_state_snapshot, current_state, self.last_action_taken)
+
+        # --- 决策环节 (保持不变，但增加了 adaptive_weights 的考量) ---
+        ui_emotion = current_state.get('ui_emotion')
+        complex_e = current_state.get('complex_emotion')
+        arousal = current_state.get('arousal', 0.0)
+        
+        state_key = "焦虑" if (complex_e and "焦虑" in complex_e) else ui_emotion
+        
+        best_action = config.ACTIONS.WAIT
+        max_score = -float('inf') 
+        
+        print(f"\n[System 2] 决策计算 | State:{state_key} | Arousal:{arousal:.2f}")
+        
+        for action in [config.ACTIONS.WAIT, config.ACTIONS.LIGHT_CARE, config.ACTIONS.DEEP_INTERVENTION]:
+            score = self._calculate_utility(state_key, action, behavior, arousal)
+            
+            # 打印包含学习权重的得分
+            learned_bias = self.adaptive_weights.get((state_key, action), 0.0)
+            print(f"   - {action:4s} | Base:{score-learned_bias:.1f} + Learn:{learned_bias:.1f} = {score:.2f}")
+            
+            if score > max_score:
+                max_score = score
+                best_action = action
+                
+        # 更新状态快照
+        if best_action != config.ACTIONS.WAIT:
+            self.last_action_time[best_action] = time.time()
+            self.last_state_snapshot = current_state # 存下当前状态，等下一轮来看看有没有变好
+            self.last_action_taken = best_action
+        else:
+            # 如果是静默，通常不进行强反馈学习，以免噪音干扰
+            self.last_state_snapshot = None
+            
+        return best_action
+
+    def _calculate_utility(self, emotion_key: str, action: str, behavior: str, arousal: float) -> float:
+        """
+        [学术重构] 效用函数 U(a) = R_static + R_adaptive + R_bias - C - P_decay
+        """
+        # 1. R_static: 静态先验知识 (Expert Knowledge)
+        r_static = config.REWARD_CONFIG.get((emotion_key, action), config.DEFAULT_REWARD)
+        
+        # 2. [新增] R_adaptive: 自适应学习权重 (Learned Preference)
+        # 这是 Agent 通过交互"学"到的偏好
+        r_adaptive = self.adaptive_weights.get((emotion_key, action), 0.0)
+
+        # 行为上下文修正
+        if "专注" in behavior and action == config.ACTIONS.DEEP_INTERVENTION:
+            r_static -= 50.0 
+
+        # 3. R_arousal_bias: 唤醒度偏差
+        r_arousal = 0.0
+        if action == config.ACTIONS.DEEP_INTERVENTION:
+            if arousal > 6.0: 
+                r_arousal = (arousal - 6.0) * 2.0
+
+        # 4. C_cost: 固有成本
+        c_cost = 0.0
+        if action != config.ACTIONS.WAIT:
+            c_cost = 2.0 
+
+        # 5. P_time_decay: 时间衰减
+        p_penalty = 0.0
+        last_time = self.last_action_time.get(action, 0)
+        if last_time > 0:
+            time_diff = time.time() - last_time
+            if action == config.ACTIONS.LIGHT_CARE:
+                p_penalty = 50.0 * math.exp(-0.05 * time_diff)
+            elif action == config.ACTIONS.DEEP_INTERVENTION:
+                p_penalty = 100.0 * math.exp(-0.01 * time_diff)
+
+        # === 总效用 ===
+        return r_static + r_adaptive + r_arousal - c_cost - p_penalty
+
+    def _learn_from_feedback(self, prev_state: dict, curr_state: dict, action: str):
+        """
+        [学术重构] 基于情感反馈的参数更新 (Delta Learning Rule).
+        如果介入后用户状态改善 -> 增加权重
+        如果介入后用户状态恶化 -> 减少权重
+        """
+        # 提取关键指标
+        prev_arousal = prev_state.get('arousal', 0.0)
+        curr_arousal = curr_state.get('arousal', 0.0)
+        
+        # 简单的改善指标: 唤醒度(压力)是否下降?
+        # Delta < 0 表示压力减轻 (Good)
+        # Delta > 0 表示压力上升 (Bad)
+        delta_arousal = curr_arousal - prev_arousal
+        
+        # 定义学习率 (Learning Rate)
+        alpha = 0.5 
+        
+        # 确定 Reward Signal (反馈信号)
+        # 如果压力下降了，给予正反馈；反之负反馈
+        # 我们希望 delta_arousal 越负越好 -> reward = -delta
+        feedback_signal = -delta_arousal 
+        
+        # 状态键
+        ui_emotion = prev_state.get('ui_emotion')
+        complex_e = prev_state.get('complex_emotion')
+        state_key = "焦虑" if (complex_e and "焦虑" in complex_e) else ui_emotion
+        
+        key = (state_key, action)
+        current_weight = self.adaptive_weights.get(key, 0.0)
+        
+        # 更新公式: W_new = W_old + alpha * (Feedback)
+        # 为了防止权重无限发散，可以加一个衰减项或者限制范围，这里简化处理
+        if abs(feedback_signal) > 0.1: # 只有显著变化才学习，忽略噪音
+            new_weight = current_weight + alpha * feedback_signal
+            
+            # 限制学习范围 (-20 到 +20)，防止过拟合
+            new_weight = max(-20.0, min(20.0, new_weight))
+            
+            self.adaptive_weights[key] = new_weight
+            
+            print(f"[自适应学习] Action '{action}' 后，压力变化 {delta_arousal:.2f}。权重修正: {current_weight:.2f} -> {new_weight:.2f}")
+
+========================================
+FILE_PATH: ai_assistant\core\emotion_engine.py
+========================================
+
+# ai_assistant/core/emotion_engine.py
+
+import numpy as np
+import math
+from ai_assistant.utils import config
+
+class EmotionEngine:
+    """
+    [学术重构版] 情感计算引擎。
+    核心算法：
+    1. 状态空间：8维 Plutchik 向量空间。
+    2. 平滑算法：指数移动平均 (EMA)。
+    3. 复杂情绪：基于模糊逻辑 (Fuzzy Logic) 的合成。
+    4. UI映射：基于余弦相似度 (Cosine Similarity) 的最近邻分类。
+    """
+    def __init__(self):
+        # 内部状态维持为 numpy 数组，方便线性代数计算
+        self.current_vector = np.zeros(8, dtype=float) 
+        self.labels = config.PLUTCHIK_EMOTIONS
+        
+        # 复合情绪的模糊隶属度记录
+        self.complex_emotions_fuzzy = {} 
+
+    def update(self, new_observation: dict) -> np.ndarray:
+        """
+        [学术重构] 状态更新方程。
+        结合了 观测输入(Input)、惯性(Inertia) 和 稳态衰减(Homeostasis)。
+        
+        System Equation:
+        S_t = [ alpha * S_{t-1} + (1 - alpha) * O_t ] * (1 - decay)
+        
+        其中:
+        - alpha (Inertia): 由人格特质 Neuroticism 决定
+        - decay (Homeostasis): 由人格特质 Extraversion 决定
+        """
+        # 1. 观测向量化
+        obs_vector = np.array([new_observation.get(label, 0.0) for label in self.labels])
+        
+        # 2. 惯性更新 (EMA)
+        alpha = config.EMOTION_INERTIA
+        smoothed_input = self.current_vector * alpha + obs_vector * (1.0 - alpha)
+        
+        # 3. [新增] 稳态调节 (Homeostatic Regulation)
+        # 模拟生物情绪的自然消退/能量耗散
+        # 如果没有持续的外部刺激 O_t，S_t 最终会收敛到 0 (平静)
+        decay_rate = config.HOMEOSTATIC_DECAY
+        
+        # 确保不会衰减成负数（虽然理论上不会，但工程上做个保护）
+        self.current_vector = smoothed_input * (1.0 - decay_rate)
+        
+        # 极小值截断 (防止浮点数拖尾)
+        self.current_vector[self.current_vector < 0.01] = 0.0
+        
+        return self.current_vector
+
+    def get_arousal_level(self) -> float:
+        """
+        计算 L2 范数 (欧几里得范数) 作为唤醒度。
+        """
+        return float(np.linalg.norm(self.current_vector))
+
+    def compute_complex_emotions(self) -> str:
+        """
+        [算法核心] 使用模糊逻辑 (Fuzzy Logic) 计算复合情绪。
+        不使用 if > 5 这种硬阈值，而是计算隶属度。
+        
+        Formula:
+        mu_High(x) = 1 / (1 + exp(-k * (x - x0)))  [Sigmoid 隶属度函数]
+        mu_Compound(A, B) = min(mu_High(A), mu_High(B)) [Zadeh算子 / T-norm]
+        """
+        # 辅助函数：计算单维度的隶属度 (Membership Degree)
+        def fuzzy_membership(value):
+            k = config.FUZZY_SIGMOID_SLOPE
+            x0 = config.FUZZY_SIGMOID_OFFSET
+            # Sigmoid 函数
+            return 1.0 / (1.0 + np.exp(-k * (value - x0)))
+
+        # 获取当前向量的字典形式
+        current_dict = dict(zip(self.labels, self.current_vector))
+        
+        # 定义复合规则 (可以扩展)
+        # 规则: Key = (Component A, Component B), Value = Name
+        rules = [
+            (("喜悦", "信任"), "爱 (Love)"),
+            (("恐惧", "期待"), "焦虑 (Anxiety)"),
+            (("期待", "喜悦"), "乐观 (Optimism)"),
+            (("惊讶", "悲伤"), "失望 (Disapproval)")
+        ]
+        
+        max_degree = 0.0
+        dominant_complex = None
+        
+        self.complex_emotions_fuzzy = {}
+
+        for (emo_a, emo_b), name in rules:
+            val_a = current_dict.get(emo_a, 0)
+            val_b = current_dict.get(emo_b, 0)
+            
+            # 计算各自的"高"隶属度
+            mu_a = fuzzy_membership(val_a)
+            mu_b = fuzzy_membership(val_b)
+            
+            # 计算复合情绪的隶属度 (取交集，即 Min)
+            mu_complex = min(mu_a, mu_b)
+            
+            self.complex_emotions_fuzzy[name] = mu_complex
+            
+            # 记录最显著的复合情绪
+            if mu_complex > max_degree:
+                max_degree = mu_complex
+                dominant_complex = name
+        
+        # 只有当隶属度超过一定置信度 (比如 0.6) 时才返回，否则认为没有显著复合情绪
+        if max_degree > 0.6:
+            return dominant_complex
+        return None
+
+    def get_ui_emotion_by_similarity(self) -> str:
+        """
+        [算法核心] 使用余弦相似度决定 UI 展示。
+        计算当前向量与所有 UI 质心向量的相似度，取最大者。
+        """
+        max_sim = -1.0
+        best_ui = "平静" # 默认
+        
+        # 防止除以零
+        norm_current = np.linalg.norm(self.current_vector)
+        if norm_current < 0.1:
+            return "平静"
+
+        for ui_name, centroid in config.UI_CENTROIDS.items():
+            norm_centroid = np.linalg.norm(centroid)
+            if norm_centroid == 0: continue
+            
+            # 余弦相似度公式: (A . B) / (||A|| * ||B||)
+            similarity = np.dot(self.current_vector, centroid) / (norm_current * norm_centroid)
+            
+            if similarity > max_sim:
+                max_sim = similarity
+                best_ui = ui_name
+                
+        return best_ui
+    
+    def get_current_state_dict(self):
+        """返回字典格式供日志使用"""
+        return dict(zip(self.labels, self.current_vector))
+
+
+
+
+
+
+
+
+========================================
+FILE_PATH: ai_assistant\core\webcam_handler.py
+========================================
+
+# ai_assistant/core/webcam_handler.py
+import cv2
+import time
+import io
+import threading
+from PIL import Image
+from datetime import datetime
+import logging
+import oss2
+import json
+
+
+# 从我们自己的包里导入所需模块
+from ai_assistant.core.api_clients import qwen_client, oss_bucket
+from ai_assistant.utils.helpers import extract_behavior_type, extract_emotion_type
+#这个导入可能是不需要的！需要注意删除
+from ai_assistant.ui.camera_window import CameraWindow
+from ai_assistant.utils import config
+from ai_assistant.core.emotion_engine import EmotionEngine
+
+from ai_assistant.utils.helpers import parse_model_response
+
+class WebcamHandler:
+    """
+    处理摄像头捕获、图像分析和与主应用通信的核心类。
+    它作为一个独立的引擎，通过回调函数与主应用解耦。
+    """
+    def __init__(self, app):
+        """
+        初始化WebcamHandler。
+        Args:
+            app: 主应用的实例。它必须实现 handle_analysis_result 和 update_status 方法。
+        """
+        self.app = app
+        self.running = False
+        self.paused = False
+        self.processing = False
+        self.cap = None
+        self.webcam_thread = None
+        self.last_webcam_image = None
+        self.camera_window = None
+        # [Phase 1.2 新增] 初始化情感引擎
+        self.emotion_engine = EmotionEngine()
+
+    def start(self) -> bool:
+        """启动摄像头捕获进程，并开始后台分析循环。"""
+        if self.running:
+            return True
+        try:
+            # 尝试打开默认摄像头 (ID=0)
+            self.cap = cv2.VideoCapture(0)
+            if not self.cap.isOpened():
+                self.app.update_status("错误: 无法打开摄像头")
+                return False
+            
+            self.running = True
+            self.create_camera_window()
+            
+            # 启动一个后台守护线程来持续读取摄像头帧
+            self.webcam_thread = threading.Thread(target=self._process_webcam_frames)
+            self.webcam_thread.daemon = True
+            self.webcam_thread.start()
+            
+            # 延迟2秒后，启动第一次图像分析
+            self.app.after(2000, self.trigger_next_capture)
+            return True
+        except Exception as e:
+            self.app.update_status(f"启动摄像头出错: {e}")
+            return False
+
+    def stop(self):
+        """安全地停止所有线程和摄像头硬件。"""
+        self.running = False
+        if self.webcam_thread and self.webcam_thread.is_alive():
+            self.webcam_thread.join(timeout=1.0) # 等待线程结束
+        if self.cap:
+            self.cap.release() # 释放摄像头资源
+        if self.camera_window and self.camera_window.winfo_exists():
+            self.camera_window.destroy()
+        self.camera_window = None
+        print("WebcamHandler 已成功停止。")
+
+    def _process_webcam_frames(self):
+        """[后台线程] 持续从摄像头读取帧并更新UI窗口。"""
+        last_ui_update_time = 0
+        ui_update_interval = 0.05  # 20 FPS
+
+        while self.running:
+            try:
+                ret, frame = self.cap.read()
+                if not ret:
+                    time.sleep(0.1)
+                    continue
+                
+                # 转换颜色格式 (OpenCV: BGR -> PIL: RGB)
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(frame_rgb)
+                self.last_webcam_image = img # 缓存最新一帧
+                
+                # 控制UI更新频率，避免过度消耗资源
+                current_time = time.time()
+                if self.camera_window and not self.camera_window.is_closed and \
+                   (current_time - last_ui_update_time) >= ui_update_interval:
+                    self.camera_window.update_frame(img)
+                    last_ui_update_time = current_time
+                
+                time.sleep(0.01) # 稍微让出CPU
+            except Exception as e:
+                print(f"摄像头处理循环错误: {e}")
+                time.sleep(1)
+
+    def trigger_next_capture(self):
+        """
+        [主线程调用] 触发下一次图像分析的入口点。
+        检查所有状态标志，确保不会重复或在不当的时机执行分析。
+        """
+        if self.running and not self.paused and not self.processing:
+            print(f"[{time.strftime('%H:%M:%S')}] 触发新一轮图像分析")
+            
+            # 将耗时的分析任务放入一个新线程，以防阻塞UI
+            analysis_thread = threading.Thread(target=self._capture_and_analyze_pipeline)
+            analysis_thread.daemon = True
+            analysis_thread.start()
+
+
+
+
+
+# ai_assistant/core/webcam_handler.py
+
+    def _capture_and_analyze_pipeline(self):
+        """[分析线程] 执行完整的“捕获->上传->分析->回调”流程。"""
+        self.processing = True
+        try:
+            self.app.update_status("正在捕捉图像...")
+            screenshots, current_screenshot = self._capture_screenshots()
+            if not screenshots:
+                raise ValueError("未能捕获有效截图")
+                
+            self.app.update_status("正在上传图像...")
+            screenshot_urls = self._upload_screenshots(screenshots)
+            if not screenshot_urls:
+                raise ValueError("上传截图失败")
+
+            self.app.update_status("正在分析图像...")
+            
+            # 1. 获取并解析 AI 原始数据
+            raw_response = self._get_image_analysis(screenshot_urls)
+            if not raw_response:
+                raise ValueError("图像分析返回空结果")
+            
+            # 引入解析器 (防止未导入报错)
+            from ai_assistant.utils.helpers import parse_model_response
+            parsed_data = parse_model_response(raw_response)
+            
+            # 2. 提取基础信息
+            behavior_info = parsed_data.get("behavior", {})
+            behavior_num = str(behavior_info.get("id", "0"))
+            behavior_desc = behavior_info.get("description", "未识别")
+            analysis_text = parsed_data.get("analysis", "无详细分析")
+            
+            # 3. [关键修正] 注入情感引擎 (Academic Engine Upgrade)
+            raw_emotion_vector = parsed_data.get("emotions", config.DEFAULT_EMOTION_VECTOR)
+            
+            # A. 更新引擎内部状态 (EMA 平滑)
+            self.emotion_engine.update(raw_emotion_vector)
+            
+            # B. 计算复合情绪 (使用新方法名: compute_complex_emotions)
+            # 旧代码调用的是 get_complex_label，这里必须改！
+            complex_label = self.emotion_engine.compute_complex_emotions()
+            
+            # C. 获取 UI 情绪 (使用新方法名: get_ui_emotion_by_similarity)
+            # 旧代码是查表，现在是计算余弦相似度
+            ui_emotion = self.emotion_engine.get_ui_emotion_by_similarity()
+            
+            # D. 获取用于日志的字典数据
+            smoothed_vector_dict = self.emotion_engine.get_current_state_dict()
+
+            # 4. 日志记录
+            timestamp = datetime.now()
+            log_msg = f"ANALYSIS | 行为:{behavior_desc} | UI:{ui_emotion} | 复合:{complex_label} | 向量:{json.dumps(smoothed_vector_dict, ensure_ascii=False)}"
+            logging.info(log_msg)
+            
+            # 5. 回调主应用
+            self.app.handle_analysis_result(
+                timestamp, 
+                analysis_text, 
+                behavior_num, 
+                behavior_desc, 
+                ui_emotion, 
+                current_screenshot,
+                complex_emotion=complex_label, # 传参
+                emotion_vector=smoothed_vector_dict # 传参
+            )
+
+        except Exception as e:
+            error_msg = f"捕获与分析流程出错: {e}"
+            print(error_msg)
+            import traceback
+            traceback.print_exc() # 打印详细报错方便调试
+            self.app.update_status(error_msg)
+        finally:
+            self.processing = False
+            delay_ms = int(config.ANALYSIS_INTERVAL_SECONDS * 1000)
+            self.app.after(delay_ms, self.trigger_next_capture)
+
+
+
+
+
+
+
+    def _capture_screenshots(self, num_shots=4, interval=0.1) -> tuple:
+        """[分析线程] 从摄像头捕获多张连续截图以模拟动态信息。"""
+        screenshots = []
+        # --- 关键修正：直接从摄像头硬件读取，确保每一帧都是新的 ---
+        for _ in range(num_shots):
+            if not self.cap or not self.cap.isOpened():
+                break # 如果摄像头关闭了，则停止捕获
+            ret, frame = self.cap.read()
+            if ret:
+                frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                screenshots.append(Image.fromarray(frame_rgb))
+            time.sleep(interval)
+        
+        return screenshots, self.last_webcam_image
+
+    def _upload_screenshots(self, screenshots: list) -> list:
+        """[分析线程] 将截图列表上传到OSS并返回URLs。"""
+        oss_urls = []
+        for i, img in enumerate(screenshots):
+            # 将PIL Image对象转换为内存中的JPEG字节流
+            buffer = io.BytesIO()
+            img.save(buffer, format='JPEG')
+            buffer.seek(0)
+            
+            object_key = f"screenshots/{int(time.time())}_{i}.jpg"
+            result = oss_bucket.put_object(object_key, buffer)
+            
+            if result.status == 200:
+                url = f"https://{config.OSS_BUCKET}.{config.OSS_ENDPOINT}/{object_key}"
+                oss_urls.append(url)
+        return oss_urls
+
+
+# url = f"https://{config.OSS_BUCKET}.{config.OSS_ENDPOINT}/{object_key}"
+# 这是在做什么？
+# 这行代码是根据OSS的规则，拼接出一个完整的、可以通过互联网访问的公开URL地址。
+
+    def _get_image_analysis(self, image_urls: list) -> str:
+        """[分析线程] 调用Qwen-VL API分析图像，同时获取行为和情感。"""
+        # 定义严格的输出结构
+        json_template = {
+            "behavior": {"id": "行为编号(1-7)", "description": "描述"},
+            "emotions": {k: "0-10分" for k in config.PLUTCHIK_EMOTIONS}, # 动态引用配置
+            "analysis": "简短的心理学观察总结(50字内)"
+        }
+
+        system_prompt = (
+            "你是一位精通‘情感计算(Affective Computing)’与‘面部动作编码系统(FACS)’的视觉分析专家。\n"
+            "你的任务是基于输入画面，进行高精度的行为识别与情感量化分析。\n\n"
+            "### 理论基础\n"
+            "1. **Plutchik 情感轮模型**：将情感解析为8个正交维度的混合向量。\n"
+            "2. **FACS (Facial Action Coding System)**：通过眉毛、眼睛、嘴角的肌肉运动单元(AU)来推断情绪。\n\n"
+            "### 核心分析步骤 (Chain of Thought)\n"
+            "请在内部进行以下思维推演，并最终输出结果：\n"
+            "1. **环境与行为上下文扫描**：通过肢体姿态(Body Pose)和物体交互(Object Interaction)确定当前行为。\n"
+            "   - 识别手部动作（如持杯、敲击键盘、握持手机）。\n"
+            "   - 识别头部姿态（如低头、后仰、侧倾）。\n"
+            "2. **面部微表情解码**：\n"
+            "   - 观察眉间纹（AU4）：判断是否存在焦虑、专注或愤怒。\n"
+            "   - 观察眼睑开合度（AU5/AU7）：判断是否存在惊恐或疲惫。\n"
+            "   - 观察嘴角拉伸（AU12/AU15）：判断愉悦或悲伤。\n"
+            "3. **情感维度量化**：基于上述特征，为 Plutchik 的8个维度打分 (0-10)。\n"
+            "   - 注意：'期待(Anticipation)' 维度通常表现为注意力高度集中、身体前倾。\n"
+            "   - 注意：'信任(Trust)' 维度通常表现为面部肌肉放松、眼神柔和。\n\n"
+            "### 任务输出定义\n"
+            "1. **行为分类 (Behavior Classification)**：\n"
+            "   必须从以下互斥集合中选择最精确的一项：\n"
+            "   [1.认真专注工作, 2.吃东西, 3.用杯子喝水, 4.喝饮料, 5.玩手机, 6.睡觉, 7.其他]\n"
+            "2. **情感量化 (Emotion Quantification)**：\n"
+            "   输出 JSON 格式的 8 维向量，禁止全0，必须捕捉细微情绪。\n\n"
+            "### 输出格式约束\n"
+            "严格输出标准 JSON 字符串，不包含 Markdown 标记，不包含任何解释性文字。"
+        )
+        
+        user_prompt = f"分析画面并严格按此JSON格式返回：{json.dumps(json_template, ensure_ascii=False)}"
+        
+        messages = [
+            {"role": "system", "content": [{"type": "text", "text": system_prompt}]},
+            {
+                "role": "user", 
+                "content": [
+                    {"type": "video", "video": image_urls},
+                    {"type": "text", "text": user_prompt}
+                ]
+            }
+        ]
+        
+        completion = qwen_client.chat.completions.create(
+            model="qwen-vl-max",
+            messages=messages,
+        )
+        return completion.choices[0].message.content
+
+    def toggle_pause(self):
+        """[主线程调用] 切换分析循环的暂停/恢复状态。"""
+        self.paused = not self.paused
+        status = "已暂停分析" if self.paused else "已恢复分析"
+        self.app.update_status(status)
+        # 如果是恢复，则立即尝试触发一次分析
+        if not self.paused:
+            self.app.after(500, self.trigger_next_capture)
+            
+
+
+
+
+    def toggle_camera_window(self):
+        """[主线程调用] 显示或隐藏摄像头窗口。"""
+        if self.camera_window and not self.camera_window.is_closed:
+            self.camera_window.on_closing()
+        else:
+            self.create_camera_window()
+
+    def create_camera_window(self):
+        """[主线程调用] 创建或显示摄像头窗口。"""
+        if not self.camera_window or self.camera_window.is_closed:
+            self.camera_window = CameraWindow(self.app)
+            self.camera_window.is_closed = False
+        else:
+            self.camera_window.deiconify() # Toplevel窗口隐藏后用deiconify来显示
+
+        # 将窗口定位在主窗口下方，增加一些偏移以防重叠
+        self.app.update() # 确保主窗口位置信息是最新的
+        main_x = self.app.winfo_x()
+        main_y = self.app.winfo_y()
+        main_height = self.app.winfo_height()
+        self.camera_window.geometry(f"640x480+{main_x}+{main_y + main_height + 40}")
+        
+
+
+========================================
+FILE_PATH: ai_assistant\core\__init__.py
+========================================
+
+
+
+========================================
+FILE_PATH: ai_assistant\ui\camera_window.py
+========================================
+
+# ai_assistant/ui/camera_window.py
+
+import customtkinter as ctk
+from PIL import Image
+
+class CameraWindow(ctk.CTkToplevel):
+    """
+    一个独立的、可重复使用的窗口，用于显示摄像头画面。
+    CTkToplevel 是 customtkinter 中用于创建顶级子窗口的类。
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.title("摄像头实时画面")
+        self.geometry("640x480")
+        # 当用户点击窗口的关闭按钮时，调用 self.on_closing 方法
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.configure(fg_color="#1a1a1a")
+
+        # 创建一个框架来容纳摄像头标签，方便管理边距
+        self.camera_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.camera_frame.pack(fill="both", expand=True, padx=5, pady=5)
+
+        # 用于显示图像的标签
+        self.camera_label = ctk.CTkLabel(self.camera_frame, text="正在启动摄像头...", text_color="white")
+        self.camera_label.pack(fill="both", expand=True)
+
+        # 状态变量
+        self.current_image = None  # 用于保持对CTkImage的引用，防止被垃圾回收
+        self.is_closed = False
+
+    def update_frame(self, img: Image.Image):
+        """
+        用新的图像帧更新窗口内容。
+        这个方法会被高频调用（大约每秒20次）。
+        """
+        # 如果窗口不存在或已标记为关闭，则不执行任何操作
+        if self.is_closed or not self.winfo_exists():
+            return
+
+        try:
+            # 调整图像大小以适应窗口当前尺寸，保持宽高比
+            img_resized = img.copy()
+            img_resized.thumbnail((self.winfo_width(), self.winfo_height()))
+
+            # 将PIL图像转换为CustomTkinter可以显示的CTkImage对象
+            ctk_img = ctk.CTkImage(
+                light_image=img_resized,
+                dark_image=img_resized,
+                size=img_resized.size
+            )
+
+            # 更新标签的图像，并清空文本
+            self.camera_label.configure(image=ctk_img, text="")
+            self.current_image = ctk_img  # 必须保存这个引用！
+        except Exception as e:
+            # 捕获可能在窗口关闭瞬间发生的UI更新错误
+            print(f"更新摄像头帧时出错 (可能窗口已关闭): {e}")
+
+    def on_closing(self):
+        """
+        处理窗口关闭事件。
+        我们选择隐藏(withdraw)而不是销毁(destroy)，这样窗口可以被重新打开，
+        而不需要重新创建实例，提高了效率。
+        """
+        self.is_closed = True
+        self.withdraw()
+
+========================================
+FILE_PATH: ai_assistant\ui\charts.py
+========================================
+
+# ai_assistant/ui/charts.py
+
+import customtkinter as ctk
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.dates as mdates
+from datetime import datetime
+import threading
+import time
+import numpy as np
+from ai_assistant.utils import config
+
+class BehaviorVisualizer:
+    """
+    [Phase 2.5 可视化升级] 多模态数据看板。
+    Layout:
+    [ 行为时间轴 (Line) ]  [                 ]
+    [ ----------------- ]  [ 情感雷达 (Radar) ]
+    [ 情绪时间轴 (Line) ]  [                 ]
+    """
+    
+    def __init__(self, parent_frame):
+        self.parent_frame = parent_frame
+        
+        # --- 映射定义 ---
+        # 行为映射 (Y轴 1-7)
+        self.behavior_map = {
+            "1": "专注", "2": "进食", "3": "喝水", "4": "饮料",
+            "5": "手机", "6": "睡觉", "7": "其他", "0": "未知"
+        }
+        # 情绪映射 (Y轴 1-8, 对应 Plutchik 维度)
+        self.emotion_labels = config.PLUTCHIK_EMOTIONS # ["喜悦", "信任", ...]
+        self.emotion_map_y = {label: i+1 for i, label in enumerate(self.emotion_labels)}
+        
+        # --- 数据存储 ---
+        self.behavior_history = [] # [(time, y_val)]
+        self.emotion_history = []  # [(time, y_val)]
+        self.current_emotion_vector = config.DEFAULT_EMOTION_VECTOR.copy()
+        
+        self.data_lock = threading.Lock()
+        
+        self._setup_charts_ui()
+        
+        self.running = True
+        self.update_thread = threading.Thread(target=self._update_charts_loop)
+        self.update_thread.daemon = True
+        self.update_thread.start()
+
+    def _setup_charts_ui(self):
+        """创建 3 个图表的布局"""
+        # 使用 Grid 布局分割左右
+        charts_frame = ctk.CTkFrame(self.parent_frame, fg_color="transparent")
+        charts_frame.pack(fill="both", expand=True)
+        charts_frame.grid_columnconfigure(0, weight=3) # 左侧 (折线图)
+        charts_frame.grid_columnconfigure(1, weight=2) # 右侧 (雷达图)
+        charts_frame.grid_rowconfigure(0, weight=1) # 左上
+        charts_frame.grid_rowconfigure(1, weight=1) # 左下
+
+        # --- 1. 左上：行为折线图 ---
+        self.fig_beh = Figure(figsize=(6, 2.5), dpi=100) # 高度减小
+        self.fig_beh.patch.set_facecolor('#242424')
+        self.ax_beh = self.fig_beh.add_subplot(111, facecolor='#242424')
+        self.canvas_beh = FigureCanvasTkAgg(self.fig_beh, master=charts_frame)
+        self.canvas_beh.get_tk_widget().grid(row=0, column=0, sticky="nsew", padx=(0, 5), pady=(0, 5))
+
+        # --- 2. 左下：情绪折线图 ---
+        self.fig_emo = Figure(figsize=(6, 2.5), dpi=100)
+        self.fig_emo.patch.set_facecolor('#242424')
+        self.ax_emo = self.fig_emo.add_subplot(111, facecolor='#242424')
+        self.canvas_emo = FigureCanvasTkAgg(self.fig_emo, master=charts_frame)
+        self.canvas_emo.get_tk_widget().grid(row=1, column=0, sticky="nsew", padx=(0, 5), pady=(5, 0))
+
+        # --- 3. 右侧：雷达图 (跨两行) ---
+        self.fig_radar = Figure(figsize=(4, 5), dpi=100)
+        self.fig_radar.patch.set_facecolor('#242424')
+        self.ax_radar = self.fig_radar.add_subplot(111, polar=True, facecolor='#242424')
+        self.canvas_radar = FigureCanvasTkAgg(self.fig_radar, master=charts_frame)
+        self.canvas_radar.get_tk_widget().grid(row=0, column=1, rowspan=2, sticky="nsew", padx=(5, 0), pady=0)
+        
+        self._redraw_charts()
+
+    def add_behavior_data(self, timestamp: datetime, behavior_num: str):
+        """添加行为数据"""
+        with self.data_lock:
+            # 简单清洗数据
+            if behavior_num not in self.behavior_map: behavior_num = "0"
+            y_val = int(behavior_num)
+            
+            self.behavior_history.append((timestamp, y_val))
+            if len(self.behavior_history) > 50: self.behavior_history.pop(0)
+
+    def update_emotion_data(self, emotion_vector: dict):
+        """添加情绪数据 (同时更新雷达图和情绪历史)"""
+        if not emotion_vector: return
+        
+        with self.data_lock:
+            self.current_emotion_vector = emotion_vector
+            
+            # 找出当前的主导情绪，用于画折线图
+            dominant_emotion = max(emotion_vector, key=emotion_vector.get)
+            y_val = self.emotion_map_y.get(dominant_emotion, 0)
+            
+            self.emotion_history.append((datetime.now(), y_val))
+            if len(self.emotion_history) > 50: self.emotion_history.pop(0)
+
+    def _update_charts_loop(self):
+        while self.running:
+            time.sleep(1.0)
+            try:
+                if self.parent_frame.winfo_exists():
+                    self.parent_frame.after(0, self._redraw_charts)
+                else:
+                    break
+            except:
+                break
+
+    def _redraw_charts(self):
+        with self.data_lock:
+            self._plot_timeline(self.ax_beh, self.fig_beh, self.canvas_beh, 
+                              self.behavior_history, self.behavior_map, "行为流", '#4CAF50')
+            
+            # 构建反向映射用于Y轴标签: {1: "喜悦", 2: "信任"...}
+            emo_y_map = {v: k for k, v in self.emotion_map_y.items()}
+            self._plot_timeline(self.ax_emo, self.fig_emo, self.canvas_emo,
+                              self.emotion_history, emo_y_map, "情绪流", '#2196F3')
+            
+            self._plot_radar(self.current_emotion_vector)
+
+    def _plot_timeline(self, ax, fig, canvas, history, y_map, title, color):
+        """
+        [修复版] 通用的折线图绘制函数。
+        修复了 KeyError: 0 问题，兼容 int 和 str 类型的字典键。
+        """
+        ax.clear()
+        ax.set_title(title, color='white', fontsize=9, pad=2)
+        
+        # 样式设置
+        ax.tick_params(axis='x', colors='gray', labelsize=7)
+        ax.tick_params(axis='y', colors='white', labelsize=7)
+        for spine in ax.spines.values(): spine.set_edgecolor('#444444')
+        ax.grid(True, linestyle='--', alpha=0.1, color='gray')
+
+        # Y轴标签设置 (修复核心逻辑)
+        if y_map:
+            # 1. 获取所有有效的 Y 值 (转换为 int 进行排序，确保轴是从下到上)
+            # 过滤掉非数字的键
+            y_vals = sorted([int(k) for k in y_map.keys() if str(k).isdigit()])
+            
+            if y_vals:
+                ax.set_yticks(y_vals)
+                
+                # 2. 安全地获取标签 (关键修复)
+                labels_list = []
+                for k in y_vals:
+                    # 尝试直接用 int 获取 (针对 emotion_map)
+                    # 如果失败，尝试转 str 获取 (针对 behavior_map)
+                    # 如果都失败，直接显示数字 k
+                    label = y_map.get(k, y_map.get(str(k), str(k)))
+                    labels_list.append(label)
+                
+                ax.set_yticklabels(labels_list)
+                
+                # 设置 Y 轴范围，稍微留点余地让点不要压线
+                ax.set_ylim(min(y_vals)-0.5, max(y_vals)+0.5)
+
+        # 绘图逻辑
+        if history:
+            times, values = zip(*history)
+            ax.plot(times, values, color=color, linewidth=1.5, marker='.', markersize=4)
+            ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M:%S'))
+            # 只显示最近的几个时间标签，防止重叠
+            ax.xaxis.set_major_locator(mdates.SecondLocator(interval=30)) 
+            fig.autofmt_xdate(rotation=0, ha='center')
+
+        fig.tight_layout()
+        canvas.draw()
+
+
+
+    def _plot_radar(self, vector):
+        """绘制雷达图"""
+        self.ax_radar.clear()
+        
+        labels = config.PLUTCHIK_EMOTIONS
+        values = [vector.get(l, 0) for l in labels]
+        
+        # 闭环
+        values += values[:1]
+        angles = np.linspace(0, 2*np.pi, len(labels), endpoint=False).tolist()
+        angles += angles[:1]
+        
+        # 绘图
+        self.ax_radar.set_facecolor('#242424')
+        self.ax_radar.grid(color='#444444')
+        
+        # 动态颜色：根据总能量改变颜色 (Arousal越高越红)
+        arousal = max(values)
+        line_color = '#FF5722' if arousal > 7 else '#00BCD4'
+        
+        self.ax_radar.plot(angles, values, color=line_color, linewidth=2)
+        self.ax_radar.fill(angles, values, color=line_color, alpha=0.3)
+        
+        self.ax_radar.set_yticklabels([])
+        self.ax_radar.set_xticks(angles[:-1])
+        self.ax_radar.set_xticklabels(labels, color='white', fontsize=8)
+        self.ax_radar.set_ylim(0, 10)
+        self.ax_radar.set_title("实时情感态势", color='white', y=1.08, fontsize=10)
+        
+        self.canvas_radar.draw()
+
+    def stop(self):
+        self.running = False
+        if self.update_thread.is_alive():
+            self.update_thread.join(timeout=1.0)
+
+========================================
+FILE_PATH: ai_assistant\ui\custom_widgets.py
+========================================
+
+# ai_assistant/ui/custom_widgets.py (新建)
+
+import customtkinter as ctk
+from PIL import Image, ImageEnhance
+
+class TransparentFrame(ctk.CTkFrame):
+    """
+    一个自定义的Frame控件，能够通过截取和处理父窗口的背景来实现伪透明效果。
+    """
+    def __init__(self, *args, transparency: float = 0.85, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # 将自身的背景设置为完全透明，这样底下的背景标签才能显示出来
+        self.configure(fg_color="transparent") 
+        
+        self.transparency = transparency
+        self._background_label = ctk.CTkLabel(self, text="", image=None)
+        self._background_label.place(relx=0, rely=0, relwidth=1, relheight=1)
+        
+        # 提升子控件的层级，确保它们显示在背景标签之上
+        self._background_label.lower()
+
+    def update_background(self, root_bg_image: Image.Image):
+        """
+        根据父窗口的背景图和自身的位置，更新自己的背景。
+        """
+        if not self.winfo_exists() or self.winfo_width() <= 1 or self.winfo_height() <= 1:
+            return
+
+        # 获取控件相对于主窗口的绝对位置
+        abs_x = self.winfo_rootx() - self.winfo_toplevel().winfo_rootx()
+        abs_y = self.winfo_rooty() - self.winfo_toplevel().winfo_rooty()
+        
+        # 从主背景图中裁剪出对应位置的区域
+        box = (abs_x, abs_y, abs_x + self.winfo_width(), abs_y + self.winfo_height())
+        cropped_image = root_bg_image.crop(box)
+
+        # 应用 "深色玻璃" 效果
+        # 通过降低亮度来实现，transparency 值越小，效果越暗
+        enhancer = ImageEnhance.Brightness(cropped_image)
+        darkened_image = enhancer.enhance(self.transparency)
+
+        # 创建CTkImage并应用到背景标签上
+        ctk_image = ctk.CTkImage(light_image=darkened_image, dark_image=darkened_image,
+                                 size=(self.winfo_width(), self.winfo_height()))
+        
+        self._background_label.configure(image=ctk_image)
+        self._background_label.image = ctk_image # 保持引用
+
+========================================
+FILE_PATH: ai_assistant\ui\__init__.py
+========================================
+
+
+
+========================================
+FILE_PATH: ai_assistant\utils\config.py
+========================================
+
+# ai_assistant/utils/config.py
+
+import os
+import numpy as np # [学术重构] 引入 Numpy 进行向量计算
+
+# ==============================================================================
+# 1. 基础服务配置 (API & Storage)
+# ==============================================================================
+
+# OSS (对象存储) 配置
+OSS_ACCESS_KEY_ID = 'xxxxxxxxxxxxxxxxxx'
+OSS_ACCESS_KEY_SECRET = 'xxxxxxxxxxxxxxxxxx'
+OSS_ENDPOINT = 'xxxxxxxxxxxxxxxxxx'
+OSS_BUCKET = 'xxxxxxxxxxxxxxxxxx'
+
+# Deepseek API 配置 (大脑)
+DEEPSEEK_API_KEY = 'xxxxxxxxxxxxxxxxxx'
+DEEPSEEK_BASE_URL = 'xxxxxxxxxxxxxxxxxx'
+
+# Qwen-VL API 配置 (视觉)
+QWEN_API_KEY = "xxxxxxxxxxxxxxxxxx"
+QWEN_BASE_URL = "xxxxxxxxxxxxxxxxxx"
+
+# TTS & ASR 配置
+TTS_MODEL = "xxxxxxxxxxxxxxxxxx"
+TTS_VOICE = "xxxxxxxxxxxxxxxxxx"
+ASR_MODEL_DIR = "xxxxxxxxxxxxxxxxxx"
+
+# 音频录制参数
+AUDIO_CHUNK = 1024
+AUDIO_FORMAT = 16
+AUDIO_CHANNELS = 1
+AUDIO_RATE = 16000
+AUDIO_WAVE_OUTPUT_FILENAME = "output.wav"
+
+# ==============================================================================
+# 2. Phase X: 情感计算数学模型 (Perception & Math Core)
+# ==============================================================================
+
+# 图像分析频率 (秒)
+ANALYSIS_INTERVAL_SECONDS = 15
+
+# Plutchik 8种基础情绪维度 (学术标准)
+PLUTCHIK_EMOTIONS = [
+    "喜悦", "信任", "恐惧", "惊讶", 
+    "悲伤", "厌恶", "愤怒", "期待"
+]
+
+# 默认零向量
+DEFAULT_EMOTION_VECTOR = {k: 0.0 for k in PLUTCHIK_EMOTIONS}
+
+# --- [学术重构] 向量空间定义 ---
+
+# 1. Plutchik 空间的基向量 (Basis Vectors, 8维正交基)
+BASIS_VECTORS = {
+    "喜悦": np.array([1, 0, 0, 0, 0, 0, 0, 0]),
+    "信任": np.array([0, 1, 0, 0, 0, 0, 0, 0]),
+    "恐惧": np.array([0, 0, 1, 0, 0, 0, 0, 0]),
+    "惊讶": np.array([0, 0, 0, 1, 0, 0, 0, 0]),
+    "悲伤": np.array([0, 0, 0, 0, 1, 0, 0, 0]),
+    "厌恶": np.array([0, 0, 0, 0, 0, 1, 0, 0]),
+    "愤怒": np.array([0, 0, 0, 0, 0, 0, 1, 0]),
+    "期待": np.array([0, 0, 0, 0, 0, 0, 0, 1]),
+}
+
+# 2. UI 状态质心向量 (Centroids of UI States)
+UI_CENTROIDS = {
+    "开心": np.array([0.8, 0.2, 0, 0, 0, 0, 0, 0]),
+    "惊讶": np.array([0, 0, 0.5, 0.8, 0, 0, 0, 0]),
+    "沮丧": np.array([0, 0, 0, 0, 0.9, 0, 0, 0]),
+    "生气": np.array([0, 0, 0, 0, 0, 0.4, 0.8, 0]),
+    "专注": np.array([0, 0.1, 0, 0, 0, 0, 0, 0.9]),
+    "平静": np.array([0, 0, 0, 0, 0, 0, 0, 0]),
+}
+
+# --- [Phase X.2 新增] 基于大五人格 (OCEAN) 的参数映射 ---
+
+# 定义数字生命的人格特质 (0.0 - 1.0)
+PERSONALITY_PROFILE = {
+    "O": 0.5, # 开放性
+    "C": 0.8, # 尽责性
+    "E": 0.6, # 外向性
+    "A": 0.9, # 宜人性
+    "N": 0.4  # 神经质
+}
+
+# 动态计算惯性系数 (Inertia)
+# N越高，情绪越容易波动(惯性小)
+def get_derived_inertia():
+    N = PERSONALITY_PROFILE["N"]
+    return max(0.1, 0.8 - 0.5 * N)
+
+EMOTION_INERTIA = get_derived_inertia()
+
+# 动态计算稳态衰减率 (Homeostatic Decay Rate)
+# 模拟能量耗散，E越高恢复越快
+def get_derived_decay_rate():
+    E = PERSONALITY_PROFILE["E"]
+    return 0.05 + 0.05 * E
+
+HOMEOSTATIC_DECAY = get_derived_decay_rate()
+
+# -----------------------------------------------------
+
+COMPOUND_THRESHOLD = 5.0    # 复合情绪激活阈值
+FUZZY_SIGMOID_SLOPE = 2.0   # Sigmoid 斜率
+FUZZY_SIGMOID_OFFSET = 5.0  # Sigmoid 中点
+
+# 负面情绪列表 (用于兼容)
+NEGATIVE_EMOTIONS = ["沮丧", "生气", "疲惫"] 
+EMOTION_TRIGGER_THRESHOLD = 1
+
+# ==============================================================================
+# 3. Phase 2: 决策内核配置 (POMDP / Utility Function)
+# ==============================================================================
+
+class ACTIONS:
+    WAIT = "静默观察"
+    LIGHT_CARE = "轻度关怀"
+    DEEP_INTERVENTION = "深度干预"
+
+REWARD_CONFIG = {
+    ("专注", ACTIONS.WAIT): 5.0,
+    ("专注", ACTIONS.LIGHT_CARE): -5.0,
+    ("专注", ACTIONS.DEEP_INTERVENTION): -20.0,
+
+    ("焦虑", ACTIONS.WAIT): -10.0,
+    ("焦虑", ACTIONS.LIGHT_CARE): 5.0,
+    ("焦虑", ACTIONS.DEEP_INTERVENTION): 10.0,
+
+    ("沮丧", ACTIONS.WAIT): -2.0,
+    ("沮丧", ACTIONS.LIGHT_CARE): 8.0,
+    ("沮丧", ACTIONS.DEEP_INTERVENTION): 2.0,
+
+    ("开心", ACTIONS.WAIT): 2.0,
+    ("开心", ACTIONS.LIGHT_CARE): 6.0,
+    ("开心", ACTIONS.DEEP_INTERVENTION): -5.0
+}
+
+DEFAULT_REWARD = 0.0
+
+# ==============================================================================
+# 4. Phase 3: 认知行为疗法 (CBT) 与交互配置
+# ==============================================================================
+
+AROUSAL_THRESHOLD_HIGH = 7.5
+
+CBT_SYSTEM_PROMPT = """
+【指令】
+你已切换至**“认知行为疗法 (CBT) 临床干预模式”**。
+当前系统检测到用户的心理唤醒度 (Arousal Level) 超过阈值，且伴随显著的负面情绪图谱。
+你的目标是通过结构化的对话，协助用户降低情绪强度 (De-escalation) 并识别认知扭曲。
+
+【干预流程 (基于 ABC 模型)】
+请严格按照以下逻辑推进对话，但保持语言的自然与温暖：
+
+1. **A (Activating Event) - 锚定当下**：
+   - 目标：帮助用户从情绪风暴中通过“着地技术 (Grounding)”回到当下。
+   - 话术策略：使用接纳承诺疗法 (ACT) 的技巧。“我感觉到一股强烈的情绪正在流过。溢涛，先停一下，跟我一起深呼吸...”
+
+2. **B (Beliefs) - 苏格拉底式探询 (Socratic Questioning)**：
+   - 目标：引导用户识别导致情绪的“自动化思维”。不要直接给建议！要提问！
+   - 关键问题示例：
+     * “刚才脑海里闪过的第一个念头是什么？”
+     * “这个想法完全是事实吗？还是包含了一些我们的猜测？”
+     * “如果最好的朋友遇到这种情况，你会怎么对他/她说？”
+
+3. **C (Consequences) - 认知解离与重构**：
+   - 目标：将“想法”与“事实”分离，寻找替代性的、更具适应性的思维方式。
+   - 策略：提供一个新的视角，或者建议一个微小的行为改变（Behavioral Activation）。
+
+【语气约束】
+- **专业且抱持 (Holding)**：像一个稳重的心理咨询师，提供安全感。
+- **降维打击**：不要试图一次解决所有问题，专注于降低当下的情绪浓度。
+- **避免有毒积极性**：不要说“开心点”、“没事的”，这是否定用户感受。要说“这确实很难，我陪着你”。
+"""
+
+SUMMARY_HOTKEY = "ctrl+shift+s"
+LOG_FILE = "behavior_log.txt"
+
+# [Phase 4 补全] 每日总结调度配置
+DAILY_SUMMARY_HOUR = 17   # 下午 5 点
+DAILY_SUMMARY_MINUTE = 30 # 30 分
+
+# ==============================================================================
+# 5. UI 与 字体配置
+# ==============================================================================
+try:
+    import matplotlib.pyplot as plt
+    import matplotlib.font_manager as fm
+    
+    chinese_fonts = ['SimHei', 'Microsoft YaHei', 'SimSun', 'NSimSun', 'FangSong', 'KaiTi']
+    chinese_font = None
+    
+    for font_name in chinese_fonts:
+        try:
+            font_path = fm.findfont(fm.FontProperties(family=font_name))
+            if os.path.exists(font_path):
+                chinese_font = font_name
+                break
+        except:
+            continue
+    
+    if chinese_font:
+        plt.rcParams['font.sans-serif'] = [chinese_font, 'DejaVu Sans']
+        plt.rcParams['axes.unicode_minus'] = False
+except Exception as e:
+    print(f"Font loading error: {e}")
+
+========================================
+FILE_PATH: ai_assistant\utils\helpers.py
+========================================
+
+# ai_assistant/utils/helpers.py
+
+import re
+import json
+from typing import Tuple
+from datetime import datetime
+from . import config
+
+def extract_emotion_type(analysis_text: str) -> str:
+    """
+    从分析文本中提取情感类型（如开心、沮丧、专注等）。
+    """
+    emotion_keywords = {
+        "开心": ["开心", "微笑", "愉悦", "兴奋"],
+        "沮丧": ["沮丧", "皱眉", "低落", "失落"],
+        "专注": ["专注", "认真", "投入", "凝神"],
+        "疲惫": ["疲惫", "困倦", "乏力", "打哈欠"],
+        "生气": ["生气", "愤怒", "烦躁", "不满"],
+        "平静": ["平静", "放松", "平和"]
+    }
+    for emotion, keywords in emotion_keywords.items():
+        for kw in keywords:
+            if kw in analysis_text:
+                return emotion
+    return "未知"
+
+def extract_language_emotion_content(text: str) -> str:
+    """
+    从ASR（语音识别）的原始输出中提取干净的对话内容。
+    """
+    match = re.search(r'>\s*([^>]*)$', text)
+    if match:
+        return match.group(1).strip()
+    return text.strip()
+
+def log_observation_to_file(observation: dict):
+    """
+    将单条观察记录以JSON格式追加到每日日志文件中。
+    """
+    if 'timestamp' in observation and isinstance(observation['timestamp'], datetime):
+        observation['timestamp'] = observation['timestamp'].isoformat()
+        
+    today_str = datetime.now().strftime('%Y-%m-%d')
+    log_file_path = f'observation_log_{today_str}.jsonl'
+    
+    try:
+        with open(log_file_path, 'a', encoding='utf-8') as f:
+            f.write(json.dumps(observation, ensure_ascii=False) + '\n')
+    except Exception as e:
+        print(f"写入观察日志文件时出错: {e}")
+
+def extract_behavior_type(analysis_text: str) -> Tuple[str, str]:
+    """
+    从AI分析文本中提取行为类型编号和描述。
+    """
+    pattern = r'(\d+)\s*[.、:]?\s*(认真专注工作|吃东西|用杯子喝水|喝饮料|玩手机|睡觉|其他)'
+    match = re.search(pattern, analysis_text)
+    
+    if match:
+        behavior_num = match.group(1)
+        behavior_desc = match.group(2)
+        return behavior_num, behavior_desc
+    
+    fallback_patterns = [
+        ('认真专注工作', '1'),
+        ('吃东西', '2'),
+        ('用杯子喝水', '3'),
+        ('喝饮料', '4'),
+        ('玩手机', '5'),
+        ('睡觉', '6'),
+        ('其他', '7')
+    ]
+    
+    for desc, num in fallback_patterns:
+        if re.search(desc, analysis_text):
+            return num, desc
+            
+    return "0", "未识别"
+
+# ==========================================
+# Phase 1.1 新增函数 (必须顶格写，不能缩进)
+# ==========================================
+def parse_model_response(response_text: str) -> dict:
+
+
+    
+    """
+    解析 Qwen-VL 返回的 JSON 数据。
+    这是连接感知（API）和决策（代码逻辑）的关键桥梁。
+    """
+    try:
+        # 1. 清洗数据
+        cleaned_text = re.sub(r'```json\s*|\s*```', '', response_text).strip()
+        if cleaned_text.lower().startswith("json"):
+            cleaned_text = cleaned_text[4:].strip()
+        
+        # 2. 解析 JSON
+        data = json.loads(cleaned_text)
+        
+        # 3. 数据完整性兜底
+        if "emotions" not in data:
+            data["emotions"] = config.DEFAULT_EMOTION_VECTOR
+            
+        if "behavior" not in data:
+            data["behavior"] = {"id": "0", "description": "未知行为"}
+            
+        return data
+
+    except Exception as e:
+        print(f"解析 JSON 失败: {e} | 原始返回: {response_text[:50]}...")
+        # 返回安全结构
+        return {
+            "behavior": {"id": "0", "description": "识别错误"},
+            "emotions": config.DEFAULT_EMOTION_VECTOR,
+            "analysis": "视觉分析数据解析失败"
+        }
+
+
+
+
+# ======================================================
+# Phase 3.3 安全熔断机制
+# ======================================================
+
+# 危机关键词库 (可扩展)
+CRISIS_KEYWORDS = [
+    "不想活", "自杀", "去死", "结束生命", "毫无意义", 
+    "绝望", "毁灭", "割腕", "跳楼", "遗书"
+]
+
+
+
+#我当然不会哈哈！是指用户啦，当然我觉得有些貌似不太吉利？
+# 危机干预硬编码回复 (不经过 LLM，确保绝对安全)
+CRISIS_RESPONSE = """
+我听到了你内心极其痛苦的声音。
+请立刻停下来，深呼吸。你现在处于非常危险的情绪风暴中，但请相信这只是暂时的。
+我恳请你立刻寻求专业帮助：
+1. 请拨打心理援助热线：400-161-9995
+2. 或者联系你最信任的朋友/家人。
+我一直在这里陪着你，直到风暴过去。
+"""
+
+def check_safety_fuse(text: str) -> bool:
+    """
+    [安全熔断] 检测文本中是否包含危机关键词。
+    Returns: True 表示触发熔断（危险），False 表示安全。
+    """
+    if not text:
+        return False
+        
+    for kw in CRISIS_KEYWORDS:
+        if kw in text:
+            return True
+    return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+========================================
+FILE_PATH: ai_assistant\utils\hotkey_manager.py
+========================================
+
+# ai_assistant/utils/hotkey_manager.py (新建)
+
+import keyboard
+import threading
+import time
+
+class HotkeyManager:
+    """
+    一个在后台独立线程中运行的全局热键管理器。
+    """
+    def __init__(self, hotkey: str, callback):
+        """
+        初始化热键管理器。
+        Args:
+            hotkey (str): 要监听的热键组合, 例如 "ctrl+shift+s"。
+            callback: 按下热键时要调用的函数。
+        """
+        self.hotkey = hotkey
+        self.callback = callback
+        self.running = False
+        self.listener_thread = None
+
+    def start_listener(self):
+        """启动后台监听线程。"""
+        if self.running:
+            return
+        
+        print(f"热键管理器已启动，正在监听: {self.hotkey}")
+        self.running = True
+        
+        # 注册热键和回调函数
+        try:
+            keyboard.add_hotkey(self.hotkey, self.callback)
+        except Exception as e:
+            print(f"错误: 注册热键 '{self.hotkey}' 失败。可能需要管理员权限运行程序。错误: {e}")
+            self.running = False
+            return
+            
+        # 启动一个守护线程，它的唯一目的就是保持程序运行，以便keyboard库能持续监听
+        self.listener_thread = threading.Thread(target=self._keep_alive_loop)
+        self.listener_thread.daemon = True
+        self.listener_thread.start()
+
+    def _keep_alive_loop(self):
+        """一个简单的循环，以确保监听线程不会立即退出。"""
+        while self.running:
+            time.sleep(1) # 每秒检查一次状态
+
+    def stop_listener(self):
+        """停止监听并清理资源。"""
+        if not self.running:
+            return
+        
+        print("正在停止热键管理器...")
+        self.running = False
+        keyboard.remove_all_hotkeys() # 清理所有已注册的热键
+        if self.listener_thread and self.listener_thread.is_alive():
+            self.listener_thread.join(timeout=1.0)
+        print("热键管理器已停止。")
+
+========================================
+FILE_PATH: ai_assistant\utils\__init__.py
+========================================
+
+

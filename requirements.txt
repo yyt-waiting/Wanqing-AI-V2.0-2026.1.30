@@ -1,0 +1,33 @@
+# --- Web 核心 (新架构) ---
+fastapi
+uvicorn
+websockets
+python-multipart
+
+# --- AI & API 核心 ---
+openai
+dashscope
+oss2
+httpx
+
+# --- 计算与视觉 (Core层) ---
+opencv-python
+numpy
+pillow
+
+# --- 语音识别 (本地模型) ---
+# 注意：若有显卡，需单独安装支持 CUDA 的 torch 版本
+funasr
+modelscope
+transformers
+sentencepiece
+torch
+torchaudio
+
+# --- 辅助工具 ---
+keyboard
+matplotlib
+pandas
+
+
+
