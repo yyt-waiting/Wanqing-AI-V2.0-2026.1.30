@@ -1,0 +1,9 @@
+mediapipe
+opencv-python
+opensmile
+numpy
+soundfile
+
+# 一个独立的第三方工具，用于读取音频/视频文件的元数据 opensmile依赖它
+# 下载到本地（不是python包）
+mediainfo 
